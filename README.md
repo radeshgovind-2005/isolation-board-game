@@ -25,7 +25,7 @@ The project includes an AI player developed using the following logic:
 * **Model:** The game board is represented and manipulated using Prolog lists.
 
 ## 🛠️ Requirements & Usage
-* **Language:** Prolog[cite: 17].
+* **Language:** Prolog.
 * **I/O:** The program uses standard `read(N)` and `write(N)` predicates for interaction.
 * **Testing:** It is recommended to test first with 3x3 boards before moving to larger dimensions.
 
