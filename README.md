@@ -3,10 +3,10 @@
 This project consists of the implementation of the **Isola** strategy game as part of the **Inteligência Artificial** (Artificial Intelligence) course at **ISEL** (Instituto Superior de Engenharia de Lisboa).
 
 ## 📋 Project Overview
-* [cite_start]**Course:** Inteligência Artificial.
-* [cite_start]**Semester:** Summer Semester 2025/2026.
-* [cite_start]**Department:** Departamento de Engenharia Informática.
-* [cite_start]**Professor:** Nuno Leite.
+* **Course:** Inteligência Artificial.
+* **Semester:** Summer Semester 2025/2026.
+* **Department:** Departamento de Engenharia Informática.
+* **Professor:** Nuno Leite.
 
 ## 🎮 The Game: Isola
 Isola is a two-player strategy game (also known as Isolation) where the objective is to block the opponent's pawn by moving like a chess queen and removing tiles from the board.
