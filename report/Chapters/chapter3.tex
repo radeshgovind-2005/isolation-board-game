@@ -1,96 +1,332 @@
-\chapter{Tutorial de \texttt{LaTeX} com exemplos}
-\label{cha:a_short_latex_tutorial_with_examples}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  chapter3.tex  --  Avaliacao Experimental
+%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
+%  Inteligencia Artificial, ISEL 2025/2026
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Este capítulo irá mostrar como pode inserir tabelas, figuras e/ou listagens. Consi\-de\-re-se que listagens não são todo o código mas partes do código. Estas irão suportar algumas frases dos parágrafos escritos. Não se esqueça, que todas as tabelas, figuras e listagens devem ser referenciadas no corpo do texto.
+\chapter{Avalia\c{c}\~{a}o Experimental}
+\label{chap:eval}
 
-\section{Tabelas} % (fold)
-\label{sec:inserting_tables}
+Este cap\'{i}tulo apresenta os resultados dos testes realizados ao sistema:
+testes unit\'{a}rios de correc\c{c}\~{a}o funcional e benchmarks de desempenho
+em diferentes configura\c{c}\~{o}es de tabuleiro e profundidade de pesquisa.
 
-Some notes are important to followed, such as present in \tablename~  \ref{tab:results}: 
-\begin{inparaenum}[i)]
-	\item Not defined vertical lines;
-	\item The legend must be on top;
-	\item Use \verb!\toprule!, \verb!\midrule! and \verb!\bottomrule! to draw horizontal lines.
-\end{inparaenum}
- 
-\begin{table}[ht]
-	\caption{Table's rules.}\vskip0.5em
-	\label{tab:results}
-\centering
-\begin{tabular}{llr}
-\toprule
-\multicolumn{2}{c}{Item} \\
-\cmidrule(r){1-2}
-Animal & Description & Price (\$) 
-\\
-\midrule
-Gnat  & per gram & 13.65 \\
-      & each     &  0.01 \\
-Gnu   & stuffed  & 92.50 \\
-Emu   & stuffed  & 33.33 \\
-\bottomrule
-\end{tabular}
+% ===================================================================
+\section{Testes Unit\'{a}rios}
+\label{sec:unit_tests}
+
+O projeto inclui uma suite de 33 testes unit\'{a}rios (ficheiro
+\texttt{tests/tests.pl}), organizados em quatro grupos.
+
+\subsection{Execu\c{c}\~{a}o e Resultados}
+
+Os testes foram executados com o comando:
+
+\begin{verbatim}
+swipl -g "run_tests, halt" tests/tests.pl
+\end{verbatim}
+
+O resultado obtido foi:
+
+\begin{verbatim}
+% Start unit: board
+% [1/33] board:initial_board_6x6_size ............... passed (0.015 sec)
+% [2/33] board:initial_board_6x6_row_length ......... passed (0.001 sec)
+% [3/33] board:initial_board_all_free ............... passed (0.000 sec)
+% [4/33] board:all_cells_3x3_count .................. passed (0.000 sec)
+% [5/33] board:get_cell_after_set ................... passed (0.000 sec)
+% [6/33] board:set_cell_nondestructive .............. passed (0.000 sec)
+% [7/33] board:get_cell_oob_row ..................... passed (0.000 sec)
+% [8/33] board:get_cell_oob_col ..................... passed (0.000 sec)
+% [9/33] board:empty_cell_free ...................... passed (0.000 sec)
+% [10/33] board:empty_cell_pawn ..................... passed (0.000 sec)
+% [11/33] board:empty_cell_removed .................. passed (0.000 sec)
+% End unit board: passed (0.007 sec CPU)
+
+% Start unit: rules
+% [12/33] rules:valid_moves_centre_3x3_count ........ passed (0.000 sec)
+% [13/33] rules:valid_moves_corner_3x3_count ........ passed (0.000 sec)
+% [14/33] rules:valid_moves_blocked_by_remove ....... passed (0.000 sec)
+% [15/33] rules:valid_moves_no_overlap_opponent ..... passed (0.000 sec)
+% [16/33] rules:valid_removes_excludes_pawns ........ passed (0.000 sec)
+% [17/33] rules:valid_removes_excl_removed_cell ..... passed (0.000 sec)
+% [18/33] rules:apply_move_source_cleared ........... passed (0.000 sec)
+% [19/33] rules:apply_remove_marks_cell ............. passed (0.000 sec)
+% [20/33] rules:game_over_no_moves .................. passed (0.000 sec)
+% [21/33] rules:game_over_has_moves ................. passed (0.000 sec)
+% [22/33] rules:player_pos_p1 ....................... passed (0.000 sec)
+% [23/33] rules:player_pos_p2 ....................... passed (0.000 sec)
+% End unit rules: passed (0.001 sec CPU)
+
+% Start unit: ai
+% [24/33] ai:evaluate_mobility_advantage ............ passed (0.000 sec)
+% [25/33] ai:evaluate_opponent_advantage ............ passed (0.000 sec)
+% [26/33] ai:evaluate_symmetric ..................... passed (0.000 sec)
+% [27/33] ai:terminal_value_p1_loses ................ passed (0.000 sec)
+% [28/33] ai:terminal_value_p2_wins ................. passed (0.000 sec)
+% [29/33] ai:best_move_trivial_win .................. passed (0.001 sec)
+% [30/33] ai:alphabeta_terminal ..................... passed (0.000 sec)
+% [31/33] ai:minimax_depth_zero ..................... passed (0.000 sec)
+% End unit ai: passed (0.002 sec CPU)
+
+% Start unit: integration
+% [32/33] integration:scripted_turn_1 ............... passed (0.000 sec)
+% [33/33] integration:scripted_game_over_detection .. passed (0.000 sec)
+% End unit integration: passed (0.000 sec CPU)
+
+% All 33 tests passed in 0.029 seconds (0.014 cpu)
+\end{verbatim}
+
+Todos os 33 testes passaram em 0.029~segundos. A execu\c{c}\~{a}o r\'{a}pida
+deve-se ao facto de a maioria dos testes operar sobre tabuleiros 3{\texttimes}3
+ou posi\c{c}\~{o}es artificiais constru\'{i}das especificamente para o teste.
+
+\subsection{Cobertura dos Testes}
+
+\begin{table}[htbp]
+  \caption{Distribui\c{c}\~{a}o e cobertura dos testes unit\'{a}rios}
+  \label{tab:tests}
+  \centering
+  \begin{tabular}{llp{7cm}}
+    \toprule
+    \textbf{M\'{o}dulo} & \textbf{N\'{u}m. testes} & \textbf{Aspetos verificados} \\
+    \midrule
+    \texttt{board}       & 11 &
+      Cria\c{c}\~{a}o do tabuleiro; acesso por coordenadas;
+      atualiza\c{c}\~{a}o n\~{a}o destrutiva; acesso fora dos limites
+      (deve falhar sem erro); \texttt{empty\_cell} para
+      c\'{e}lulas livres, ocupadas e removidas. \\
+    \addlinespace
+    \texttt{rules}       & 12 &
+      Movimentos v\'{a}lidos do centro e do canto;
+      bloqueio por casa removida; aus\^{e}ncia de sobreposic\~{a}o
+      com o advers\'{a}rio; lista de remo\c{c}\~{o}es (exclu\'{i} pe\~{o}es
+      e casas j\'{a} removidas); aplica\c{c}\~{a}o de movimento e
+      remo\c{c}\~{a}o; detec\c{c}\~{a}o de fim de jogo. \\
+    \addlinespace
+    \texttt{ai}          & 8 &
+      Fun\c{c}\~{a}o de avalia\c{c}\~{a}o (vantagem P1, vantagem P2,
+      posi\c{c}\~{a}o sim\'{e}trica); valores terminais; melhor
+      movimento em situa\c{c}\~{a}o de vit\'{o}ria trivial;
+      alfa-beta em posi\c{c}\~{a}o terminal; minimax a profundidade zero. \\
+    \addlinespace
+    \texttt{integration} & 2 &
+      Turno completo (movimento + remo\c{c}\~{a}o num jogo real);
+      detec\c{c}\~{a}o de fim de jogo no contexto de um jogo jogado. \\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
+\subsection{Exemplo de Teste Unit\'{a}rio}
 
-\section{Importar Figuras} % (fold)
-\label{sec:importing_images}
+Para ilustrar a estrutura dos testes, apresenta-se o teste que verifica
+o n\'{u}mero de movimentos v\'{a}lidos a partir do centro de um tabuleiro 3{\texttimes}3:
 
-\subsection{Inserir figuras lado-a-lado com texto} % (fold)
- \label{ssec:inserting_images_wrapped_with_text}
- 
- You should only use this feature is \emph{really} necessary. This means, you have a very small image, that will look lonely just with text above and below.
+\begin{lstlisting}[language=Prolog,
+    caption={Teste: movimentos do centro de um tabuleiro 3{\texttimes}3},
+    label={lst:test_example},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+:- use_module(library(plunit)).
+:- begin_tests(rules).
 
- \begin{wrapfigure}{l}{3cm}
-   \centering
-     \includegraphics[width=2cm]{evolution_steps-vectorial}
-   \caption{Vectorial image}\
- \end{wrapfigure}	
- 
- \noindent\verb!\usepackage{wrapfig}!\\
- This then gives you access to:\\
- \verb!\begin{wrapfigure}[lineheight]{alignment}{width}!
- 
- Alignment can normally be either 'l' for left, or 'r' for right. Lowercase 'l' or 'r' forces the figure to start precisely where specified (and may cause it to run over page breaks), while capital 'L' or 'R' allows the figure to float. If you defined your document as twosided, the alignment can also be 'i' for inside or 'o' for outside, as well as 'I' or 'O'. The width is obviously the width of the figure. \\[.5em]
+test(valid_moves_centre_3x3_count) :-
+    initial_board(3, B0),
+    set_cell(B0, 0, 0, x, B1),
+    set_cell(B1, 2, 2, o, Board),
+    valid_moves(Board, 1, 1, Moves), % piao no centro (1,1)
+    length(Moves, N),
+    assertion(N =:= 7). % 8 direcoes - 1 (canto ocupado)
 
- 
- 
-\subsection{Outras imagens} % (fold)
-\label{ssec:floats_figures_and_captions}
+:- end_tests(rules).
+\end{lstlisting}
 
- 
-There are two different ways to place two figures/tables side-by-side.  More complicated figures with multiple images. You can do this using subfigure environments inside a figure environment. Subfigure will alphabetically number your subfigures and you have access to the complete reference as usual through \verb!\ref{fig:figurelabel}!, \figurename~\ref{fig:figura-completa}, or \figurename~\ref{fig:ra-raster} using \verb!\ref{fig:subfigurelabel}!.
+% ===================================================================
+\section{Benchmarks de Desempenho}
+\label{sec:benchmarks}
 
-\begin{figure}[htbp]
-	\centering
-    \begin{subfigure}[b]{0.25\textwidth}
-    	\centering
-		\includegraphics[width=\textwidth]{ra-vectorial}
-		\caption{}
-		\label{fig:ra-vectorial}
-     \end{subfigure}	
-\qquad\qquad
- 	\begin{subfigure}[b]{0.25\textwidth}
-    	\centering
-		\includegraphics[width=\textwidth]{ra-raster}
-		\caption{}
-		\label{fig:ra-raster}
-	\end{subfigure}		
-  \caption{Subfigure example with vectorial and no-vectorial images}
-  \label{fig:figura-completa}
-\end{figure}
+Para avaliar o desempenho do algoritmo alfa-beta, foram medidos os
+tempos de execu\c{c}\~{a}o do primeiro movimento da IA em diferentes
+combina\c{c}\~{o}es de tamanho de tabuleiro e profundidade de pesquisa.
+Todos os testes partiram do estado inicial do jogo (pe\~{o}es nos cantos
+opostos, tabuleiro completamente livre).
 
-\section{Listagens} % (fold)
-\label{sec:listings}
+\subsection{Metodologia}
 
-Using the package listings you can add non-formatted text as you would do with \verb!\begin{verbatim}! but its main aim is to include the source code of any programming language within your document, or inline with 
-\verb!\codejava{int i;}.!
-If you wish to include pseudocode or algorithms see \url{http://en.wikibooks.org/wiki/LaTeX/Algorithms\_and\_Pseudocode}, as \lstlistingname ~\ref{lst:Calculadora}.
-\vskip1em
+Os tempos foram medidos com o predicado \texttt{get\_time/1} do
+SWI-Prolog (tempo de rel\'{o}gio de parede), no seguinte ambiente:
 
-%  \lstfromfile{language}{linerange}{caption}{label}{othersinsideoflstinoputlisting}{path}
+\begin{itemize}
+  \item Sistema operativo: macOS Darwin 25.3.0 (Apple Silicon)
+  \item SWI-Prolog (vers\~{a}o padr\~{a}o, sem otimiza\c{c}\~{o}es adicionais)
+  \item Medida: tempo para calcular o primeiro movimento da IA
+        a partir do estado inicial
+\end{itemize}
 
-\lstfromfile{java}{7,11-12,15-17}{Opera\c{c}\~{o}es elementares de uma Calculadora}{Calculadora}{showlines=true,morekeywords={begin,System,out,print},numbers=left, firstnumber=1}{Calculadora.java}
+\subsection{Resultados}
 
+\begin{table}[htbp]
+  \caption{Tempo de c\'{a}lculo do primeiro movimento da IA}
+  \label{tab:benchmarks}
+  \centering
+  \begin{tabular}{ccrll}
+    \toprule
+    \textbf{Tabuleiro} &
+    \textbf{Profundidade} &
+    \textbf{Tempo} &
+    \textbf{Movimento} &
+    \textbf{Remo\c{c}\~{a}o} \\
+    \midrule
+    3{\texttimes}3 & 2 & 4~ms       & (0,0)$\to$(1,1) & (1,2) \\
+    3{\texttimes}3 & 4 & 136~ms     & (0,0)$\to$(1,1) & (1,2) \\
+    6{\texttimes}6 & 2 & 87~ms      & (0,0)$\to$(1,1) & (4,4) \\
+    6{\texttimes}6 & 4 & 167.619~ms $\approx$ 2 min 47 s & (0,0)$\to$(1,1) & (4,4) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-\centering{\textbf{Written by Matilde Pós-de-Mina Pato\footnote{O autor escreve segundo o antigo AO}, \\2020 September -  version 2.2}}
+\subsection{An\'{a}lise dos Resultados}
+
+\subsubsection{Fator de Ramifica\c{c}\~{a}o Real}
+
+No estado inicial de um tabuleiro 6{\texttimes}6, o Jogador~1 pode:
+\begin{itemize}
+  \item \textbf{Mover} para 3 casas (canto com 3 vizinhos livres).
+  \item \textbf{Remover} qualquer uma de 34 casas livres
+        (36 casas $-$ 2 pe\~{o}es).
+\end{itemize}
+
+Total de pares (movimento, remo\c{c}\~{a}o): $3 \times 34 = 102$.
+
+Este \'{e} o fator de ramifica\c{c}\~{a}o no n\'{i}vel 1. Nas jogadas seguintes,
+quando os pe\~{o}es se movem para o centro, cada jogador pode ter at\'{e}~8
+destinos poss\'{i}veis, o que eleva o fator de ramifica\c{c}\~{a}o.
+
+\subsubsection{Impacto da Profundidade}
+
+O salto de profundidade~2 para profundidade~4 no tabuleiro 6{\texttimes}6
+representa um aumento de $87~\text{ms}$ para $167.619~\text{ms}$ ---
+um fator de aproximadamente $\mathbf{1927\times}$. Este crescimento
+super-exponencial confirma o car\'{a}ter combinat\'{o}rio do problema.
+
+Embora o alfa-beta reduza significativamente o n\'{u}mero de n\'{o}s
+explorados em rela\c{c}\~{a}o ao minimax puro, o fator de ramifica\c{c}\~{a}o
+elevado ($\approx 102$) no estado inicial de um tabuleiro 6{\texttimes}6
+torna a profundidade~4 impraticável para uso interativo.
+
+\subsubsection{Consist\^{e}ncia dos Movimentos Escolhidos}
+
+Nota-se que em todas as configura\c{c}\~{o}es, a IA escolheu o mesmo
+movimento: mover o pe\~{a}o do canto (0,0) para o centro (1,1).
+Isto \'{e} consistente com a fun\c{c}\~{a}o de avalia\c{c}\~{a}o que favorece
+a centralidade --- o pe\~{a}o no centro (1,1) de um tabuleiro 3{\texttimes}3
+tem acesso a at\'{e}~7 casas, enquanto no canto (0,0) tem apenas~3.
+
+A diferen\c{c}a na escolha da remo\c{c}\~{a}o entre profundidade~2
+((1,2) em 3{\texttimes}3) e profundidade~4 ((4,4) em 6{\texttimes}6)
+reflete a vis\~{a}o de futuro mais profunda da pesquisa a maior
+profundidade.
+
+\subsubsection{Avalia\c{c}\~{a}o da Fun\c{c}\~{a}o Heur\'{i}stica}
+
+Os testes confirm\'{a}ram os valores esperados da fun\c{c}\~{a}o de avalia\c{c}\~{a}o:
+
+\begin{table}[htbp]
+  \caption{Valores da fun\c{c}\~{a}o de avalia\c{c}\~{a}o em posi\c{c}\~{o}es de teste}
+  \label{tab:eval_values}
+  \centering
+  \begin{tabular}{llrrr}
+    \toprule
+    \textbf{Posi\c{c}\~{a}o} &
+    \textbf{Configura\c{c}\~{a}o} &
+    \textbf{Mob. P1} &
+    \textbf{Mob. P2} &
+    \textbf{Valor} \\
+    \midrule
+    Sim\'{e}trica (cantos opostos)  & 3{\texttimes}3, (0,0) vs.\ (2,2) & 3 & 3 & 0 \\
+    Assim\'{e}trica (canto vs.\ centro) & 3{\texttimes}3, (0,0) vs.\ (1,1) & 2 & 7 & $-52$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+O valor~$0$ na posi\c{c}\~{a}o sim\'{e}trica confirma que a fun\c{c}\~{a}o n\~{a}o \'{e}
+tendenciosa para nenhum jogador. O valor~$-52$ na posi\c{c}\~{a}o assim\'{e}trica
+reflete corretamente a vantagem significativa de P2 (maior mobilidade e
+melhor centralidade).
+
+% ===================================================================
+\section{Limita\c{c}\~{o}es e Trabalho Futuro}
+\label{sec:limitations}
+
+\subsection{Limita\c{c}\~{o}es Identificadas}
+
+\begin{enumerate}
+  \item \textbf{Desempenho em tabuleiros grandes a profundidade alta:}
+        A combina\c{c}\~{a}o 6{\texttimes}6 + profundidade~4 \'{e} proibitiva
+        ($\approx 167$~s por movimento). O fator de ramifica\c{c}\~{a}o
+        elevado, resultante da grande quantidade de casas remov\'{i}veis,
+        \'{e} a causa principal.
+
+  \item \textbf{Formato de entrada:} os jogadores humanos t\^{e}m de
+        introduzir posi\c{c}\~{o}es no formato \texttt{Linha/Coluna.}
+        (com ponto final), pois o predicado \texttt{read/1} do
+        SWI-Prolog espera um termo Prolog completo terminado por ponto.
+        Este formato pode causar confus\~{a}o.
+
+  \item \textbf{Aus\^{e}ncia de tabela de transposi\c{c}\~{a}o:} posi\c{c}\~{o}es
+        iguais atingidas por caminhos diferentes s\~{a}o reavaliadas.
+        Uma tabela de transposi\c{c}\~{a}o reduziria o trabalho redundante.
+
+  \item \textbf{Sem aprofundamento iterativo:} a profundidade \'{e}
+        fixa. O aprofundamento iterativo (aumentar gradualmente a
+        profundidade at\'{e} ao limite de tempo) melhoraria a qualidade
+        do jogo em tempo fixo.
+\end{enumerate}
+
+\subsection{Recomenda\c{c}\~{o}es de Configura\c{c}\~{a}o}
+
+Com base nos resultados experimentais:
+
+\begin{itemize}
+  \item Para tabuleiros 3{\texttimes}3: profundidade~4 \'{e} adequada
+        (136~ms por movimento).
+  \item Para tabuleiros 6{\texttimes}6: profundidade~2 \'{e} o
+        compromisso recomendado (87~ms por movimento),
+        oferecendo uma resposta quase instant\^{a}nea.
+  \item Profundidade~6 n\~{a}o \'{e} recomendada para tabuleiros
+        maiores que 3{\texttimes}3 sem otimiza\c{c}\~{o}es adicionais.
+\end{itemize}
+
+% ===================================================================
+\section{Conclus\~{o}es}
+\label{sec:conclusions}
+
+Este trabalho demonstrou que \'{e} poss\'{i}vel implementar um jogo de
+estrat\'{e}gia completo com IA em Prolog de forma elegante e eficaz.
+
+\textbf{Objetivos cumpridos:}
+\begin{itemize}
+  \item Implementa\c{c}\~{a}o completa do jogo ISOLA com todos os modos
+        (humano-humano, humano-IA, IA-IA) e tamanhos de tabuleiro
+        configur\'{a}veis.
+  \item Algoritmo alfa-beta funcional com ordena\c{c}\~{a}o de movimentos
+        e fun\c{c}\~{a}o de avalia\c{c}\~{a}o heur\'{i}stica.
+  \item Suite de 33 testes unit\'{a}rios, todos bem sucedidos.
+  \item Compreens\~{a}o pr\'{a}tica do \textit{backtracking}, da programa\c{c}\~{a}o
+        l\'{o}gica e dos algoritmos de pesquisa em jogos.
+\end{itemize}
+
+\textbf{Principais aprendizagens:}
+\begin{itemize}
+  \item O Prolog permite exprimir regras de jogo de forma quase
+        direta a partir da descri\c{c}\~{a}o em linguagem natural,
+        aproveitando o \textit{backtracking} para gerar automaticamente
+        todos os movimentos v\'{a}lidos.
+  \item O alfa-beta \'{e} essencial para tornar o \textit{minimax}
+        pr\'{a}tico: sem poda, profundidade~4 num tabuleiro 6{\texttimes}6
+        seria completamente invi\'{a}vel.
+  \item A ordena\c{c}\~{a}o de movimentos \'{e} t\~{a}o importante quanto o
+        pr\'{o}prio alfa-beta: maus movimentos avaliados primeiro
+        reduzem drasticamente a efic\'{a}cia dos cortes.
+\end{itemize}

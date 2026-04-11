@@ -1,169 +1,607 @@
-% 
-%  chapter2.tex
-%  ReportISEL
-%  
-%  Created by Matilde Pós-de-Mina Pato on 2012/10/09.
-%
-\chapter{Manual do utilizador}
-\label{cha:users_manual}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  chapter2.tex  --  Implementacao
+%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
+%  Inteligencia Artificial, ISEL 2025/2026
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% ================
-% = Introduction =
-% ================
-\section{Introdução} % (fold)
-\label{sec:introduction}
-Este documento reutiliza algumas partes do \textit{template} criado para a escrita da Dissertação/Trabalho de Projecto de Mestrado de MEIC. Por ser meramente informativo, o resto do documento encontra-se escrito na lingua inglesa.
+\chapter{Implementa\c{c}\~{a}o}
+\label{chap:impl}
 
-% section introduction (end)
+Este cap\'{i}tulo descreve a implementa\c{c}\~{a}o do jogo ISOLA em SWI-Prolog.
+O projeto est\'{a} organizado em cinco m\'{o}dulos:
 
-% ====================
-% = Folder Structure =
-% ====================
-\section{Folder Structure} % (fold)
-\label{sec:folder_structure}
+\begin{table}[htbp]
+  \caption{Estrutura de m\'{o}dulos do projeto}
+  \label{tab:modules}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Ficheiro} & \textbf{Responsabilidade} & \textbf{Predicados principais} \\
+    \midrule
+    \texttt{board.pl}  & Representa\c{c}\~{a}o e display do tabuleiro
+                       & \texttt{initial\_board}, \texttt{get\_cell}, \texttt{set\_cell} \\
+    \texttt{rules.pl}  & Regras e valida\c{c}\~{a}o de movimentos
+                       & \texttt{valid\_move}, \texttt{apply\_move}, \texttt{game\_over} \\
+    \texttt{ai.pl}     & Intelig\^{e}ncia artificial (alfa-beta)
+                       & \texttt{best\_move}, \texttt{alphabeta}, \texttt{evaluate} \\
+    \texttt{game.pl}   & Interface e ciclo de jogo
+                       & \texttt{play}, \texttt{game\_loop}, \texttt{human\_turn} \\
+    \texttt{main.pl}   & Ponto de entrada
+                       & \texttt{initialization} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-The template file for writing dissertations in  \texttt{LaTeX} is organized into a main directory, a set of files and sub-directories. \textbf{reportisel}  is the main directory and includes:
-	\begin{description}
-		\item[Logo] Directory with Faculty logos;
-		\item[Chapters] Directory where to put user files (text and figures);
-		\begin{description}
-		\item[scripts] Directory with useful bash scripts, e.g., for cleaning all temporary files;
-		\item[img] Directory with all images to use in the chapters, e.g. \texttt{ra-raster.png};
-		\end{description}
-		\item[alpha-pt.bst] A file with bibliography names in portuguese, e.g., 'Relatório Técnico'. This file is used automatically if Portuguese is selected as the main language (see below);
-		\item[defaults.tex] A file with the main default values for the package (institution name, faculty's logo, degree name and similars - {\color{red}{TO CHANGE BY THE USER}});
-		\item[personaldataofreport.tex] A file with the main default values for the package (identification of report as well as the author and juries - {\color{red}{TO CHANGE BY THE USER}});
-		\item[template.tex] The main file. You should run  \texttt{LaTeX} in this one. Please refrain from changing the file content outside of the well defined area;
-		\item[bibliography.bib] The bib file. An easy way to find to import citation into \texttt{bibtex} is select option \texttt{Show links to import citation into \texttt{BibTex}} in \href{http://scholar.google.pt/scholar_settings?hl=en&as_sdt=0,5}{\texttt{Scholar google settings}}.
-		\item[reportisel.cls] The  \texttt{LaTeX} class file for the thesis{} style. Currently, some of the defaults are stored here instead of \verb!defaults.tex!. This file should not be changed, unless you're ready to play with fire! :) - {\color{red}{DO NOT CHANGE}});
-	\end{description}
+% ===================================================================
+\section{Representa\c{c}\~{a}o do Tabuleiro (\texttt{board.pl})}
+\label{sec:board}
 
-Again, we would like to recall that all the user \texttt{LaTeX} files should be stored in the \verb!reportisel! directory, and all the images in \verb!reportisel/Chapters/img! directory.\todo[inline]{Yet another note!}
-% section folder_structure (end)
+\subsection{Estrutura de Dados}
 
-% ===================
-% = Package options =
-% ===================
-\section{Package Options} % (fold)
-\label{sec:package_options}
-
-The thesis{} style includes the following options, that must be included in the options list in the \verb!\documentclass[options]{reportisel}! line at the top of the \texttt{template.tex} file.
-
-The list below aggregates related options in a single item. For each list, the default value is prefixed with a *.
-
-\subsection{Language Related Options} % (fold)
-\label{sub:language_related_options}
-
-You must choose the main language for the document. The available options are:
-
-\begin{enumerate}
-	\item \textbf{*pt} --- The text is written in Portuguese (with a small abstract in English).
-	\item \textbf{en} --- The text is written in English (with a small abstract in Portuguese).
-\end{enumerate}
-
-The language option affects:
-\begin{itemize}
-	\item \textbf{The order of the summaries.} At first the abstract in the main language and then in the foreign language. This means that if your main language for the document in english, you will see first the abstract (in english) and then the 'resumo' (in portuguese). If you switch the main language for the document, it will also automatically switch the order of the summaries.
-	\item \textbf{The names for document sectioning.} E.g., 'Chapter' vs.\ 'Capítulo', 'Table of Contents' vs.\ 'Índice', 'Figure' vs.\ 'Figura', etc.
-	\item \textbf{The type of documents in the bibliography.} E.g., 'Technical Report' vs.\ 'Relatório Técnico'.
-\end{itemize} 
-
-No mater which language you chose, you will always have the appropriate hyphenation rules according to the language at that point. You always get portuguese hyphenation rules in the 'Resumo', english hyphenation rules in the 'Abstract', and then the main language hyphenation rules for the rest of the document. If you need to force hyphenation write inside of \verb!\hyphenation{}! the hyphenated word, e.g. \verb!\hyphenation{op-ti-cal net-works}!.
-% section package_options (end)
-
-\subsection{Class of Text} % (fold)
-\label{sub:class_of_text}
-
-You must choose the class of text for the document. The available options are:
-
-\begin{enumerate}
-	\item \textbf{rpt} --- BSc report.
-	\item \textbf{preprpt} --- Preparation of Bsc report. This is a preliminary report graduate students at ISEL/IPL must prepare to conclude the first semester.
-\end{enumerate}
-%% subsection class_of_text (end)
-%
-%% ============
-%% = Printing =
-%% ============
-\subsection{Printing} % (fold)
-\label{sub:printing}
-
-You must choose how your document will be printed. The available options are:
-\begin{enumerate}
-	\item \textbf{oneside} --- Single side page printing.
-	\item \textbf{*twoside} --- Double sided page printing.
-\end{enumerate}
-% subsection printing (end)
-
-% =============
-% = Font Size =
-% =============
-\subsection{Font Size} % (fold)
-\label{ssec:font_size}
-
-You must select the encoding for your text. The available options are:
-\begin{enumerate}
-	\item \textbf{11pt} --- Eleven (11) points font size.
-	\item \textbf{*12pt} --- Twelve (12) points font size. You should really stick to 12pt\ldots
-\end{enumerate}
-% subsection font_size (end)
-
-% =================
-% = Text encoding =
-% =================
-\subsection{Text Encoding} % (fold)
-\label{ssec:text_encoding}
-
-You must choose the font size for your document. The available options are:
-\begin{enumerate}
-	\item \textbf{latin1} --- Use Latin-1 (\href{http://en.wikipedia.org/wiki/ISO/IEC_8859-1}{ISO 8859-1}) encoding.  Most probably you should use this option if you use Windows;
-	\item \textbf{utf8} --- Use \href{http://en.wikipedia.org/wiki/UTF-8}{UTF8} encoding.    Most probably you should use this option if you are not using Windows.
-\end{enumerate}
-% subsection font_size (end)
-
-% ============
-% = Examples =
-% ============
-\subsection{Examples} % (fold)
-\label{ssec:examples}
-
-Let's have a look at a couple of examples:
+O tabuleiro \'{e} representado como uma \textbf{lista de listas} em Prolog.
+Cada elemento da lista exterior \'{e} uma linha do tabuleiro; cada elemento
+de uma linha \'{e} um \'{a}tomo que indica o conte\'{u}do da casa:
 
 \begin{itemize}
-	\item Preparation of report document, in portuguese, with 12pt size, to be printed twoside sided  and to be read on screen
-	\begin{lstlisting}[language=myLatex]
-	\documentclass[
-		preprpt,	% (*)rpt, preprpt - Technical Report or PrepTechnical Report
-		pt,	% (*)pt, en - languages 
-		twoside,	% (*)twoside, oneside - single or double sided printing
-		12pt,	% (*)12pt, 11pt, 10pt - use font size
-		a4paper,	% Paper size/format
-		utf8,		% (*)utf8, latin1 - Text encoding: Linux, Mac or Windows
-		onscreen,	% (*)onscreen, onpaper - Page layout: screen versus paper print
-		hyperref = true,  % (*)true, false - Hyperlinks in citations
-		listof = totoc	% Print all entries in table of contents
-	]{reportisel} 
-	\end{lstlisting}
-	\item Report, in english, with 12pt size and to be printed one sided (I wonder why one would do this!), in paper
-	\begin{lstlisting}[language=myLatex]
-	\documentclass[
-		rpt,	% (*)rpt, preprpt - Technical Report or PrepTechnical Report
-		pt,	% (*)pt, en - languages 
-		oneside,	% (*)twoside, oneside - single or double sided printing
-		12pt,	% (*)12pt, 11pt, 10pt - use font size
-		a4paper,	% Paper size/format
-		utf8,		% (*)utf8, latin1 - Text encoding: Linux, Mac or Windows
-		onpaper,	% (*)onscreen, onpaper - Page layout: screen versus paper print
-		hyperref = true,  % (*)true, false - Hyperlinks in citations
-		listof = totoc	% Print all entries in table of contents
-	]{reportisel} 
-	\end{lstlisting}
+  \item \texttt{'.'} --- casa livre (vazia)
+  \item \texttt{x}   --- pe\~{a}o do Jogador~1
+  \item \texttt{o}   --- pe\~{a}o do Jogador~2
+  \item \texttt{'\#'} --- casa permanentemente removida
 \end{itemize}
-% subsection examples (end)
 
-\section{How to Write Using \texttt{LaTeX}} % (fold)
-\label{sec:how_to_write_using_latex}
+As posi\c{c}\~{o}es s\~{a}o representadas como o termo composto \texttt{Linha/Coluna}
+(indexa\c{c}\~{a}o a partir de zero). Por exemplo, \texttt{2/3} significa linha~2,
+coluna~3.
 
-Please have a look at Chapter~\ref{cha:a_short_latex_tutorial_with_examples}, where you may find many examples of \href{http://tobi.oetiker.ch/lshort/lshort.pdf}{\texttt{LaTeX}} constructs, such as Sectioning, inserting Figures and Tables, writing Equations, Theorems and algorithms, exhibit code listings, etc.
+\textbf{Vantagem desta representa\c{c}\~{a}o:} as listas s\~{a}o a estrutura
+nativa do Prolog, e predicados como \texttt{nth0/3} (acesso por \'{i}ndice) e
+\texttt{maplist/2} (aplica\c{c}\~{a}o funcional) est\~{a}o dispon\'{i}veis na
+biblioteca padr\~{a}o, o que simplifica enormemente o c\'{o}digo.
 
-%% section how_to_write_using_latex (end)
+\subsection{Predicados Principais}
+
+O predicado \texttt{initial\_board/2} cria um tabuleiro de tamanho
+$N{\times}N$ totalmente preenchido com casas livres:
+
+\begin{lstlisting}[language=Prolog,
+    caption={Cria\c{c}\~{a}o do tabuleiro inicial},
+    label={lst:initial_board},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+initial_board(Size, Board) :-
+    length(Board, Size),        % Board tem Size linhas
+    maplist(make_row(Size), Board). % cada linha tem Size colunas
+
+make_row(Size, Row) :-
+    length(Row, Size),
+    maplist(=('.'), Row).       % cada celula e '.'
+\end{lstlisting}
+
+\textbf{Como funciona:} \texttt{length(Board,~Size)} cria uma lista de
+\texttt{Size} vari\'{a}veis n\~{a}o instanciadas. O \texttt{maplist} aplica
+\texttt{make\_row} a cada elemento, e dentro de cada linha, \texttt{maplist(=('.'),~Row)}
+unifica cada c\'{e}lula com o \'{a}tomo \texttt{'.'}.
+
+A atualiza\c{c}\~{a}o de uma c\'{e}lula \'{e} \textbf{n\~{a}o destrutiva}: o Prolog n\~{a}o
+modifica estruturas existentes, mas constr\'{o}i uma nova vers\~{a}o do tabuleiro.
+Esta \'{e} uma caracter\'{i}stica fundamental da programa\c{c}\~{a}o l\'{o}gica.
+
+\begin{lstlisting}[language=Prolog,
+    caption={Atualiza\c{c}\~{a}o n\~{a}o destrutiva de uma c\'{e}lula},
+    label={lst:set_cell},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+set_cell(Board, Row, Col, Value, NewBoard) :-
+    nth0(Row, Board, OldRow, RestRows),   % separa a linha Row
+    nth0(Col, OldRow, _, RestCols),       % separa o elemento Col
+    nth0(Col, NewRow, Value, RestCols),   % reconstroi linha com novo valor
+    nth0(Row, NewBoard, NewRow, RestRows).% reconstroi tabuleiro
+\end{lstlisting}
+
+\textbf{Analogia:} pense num fotograma de cinema. Quando um personagem
+se move, n\~{a}o se apaga o fotograma anterior --- cria-se um novo fotograma
+com o personagem na nova posi\c{c}\~{a}o. O Prolog funciona da mesma forma.
+
+% ===================================================================
+\section{Regras do Jogo (\texttt{rules.pl})}
+\label{sec:rules}
+
+\subsection{Valida\c{c}\~{a}o de Movimentos}
+
+Um movimento \'{e} v\'{a}lido se a casa de destino:
+\begin{enumerate}
+  \item estiver a exatamente um passo (em qualquer das 8 dire\c{c}\~{o}es);
+  \item estiver dentro dos limites do tabuleiro;
+  \item estiver livre (\texttt{'.'}).
+\end{enumerate}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Valida\c{c}\~{a}o de um movimento},
+    label={lst:valid_move},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+valid_move(Board, FromR, FromC, ToR, ToC) :-
+    board_size(Board, Size),
+    Max is Size - 1,
+    member(DR, [-1, 0, 1]),     % delta de linha: -1, 0 ou +1
+    member(DC, [-1, 0, 1]),     % delta de coluna: -1, 0 ou +1
+    \+ (DR =:= 0, DC =:= 0),   % nao pode ficar no lugar
+    ToR is FromR + DR,
+    ToC is FromC + DC,
+    ToR >= 0, ToR =< Max,       % dentro dos limites
+    ToC >= 0, ToC =< Max,
+    get_cell(Board, ToR, ToC, '.'). % casa livre
+\end{lstlisting}
+
+Este predicado funciona tanto como \textbf{verificador} (quando
+\texttt{ToR/ToC} j\'{a} est\~{a}o instanciados) como \textbf{gerador} (quando
+est\~{a}o livres, o Prolog gera por \textit{backtracking} todas as combina\c{c}\~{o}es
+de \texttt{DR/DC}). Esta dualidade \'{e} uma das caracter\'{i}sticas mais elegantes
+do Prolog.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \textbf{Pe\~{a}o no centro: 8 movimentos}
+    \begin{verbatim}
+  X X X
+  X P X
+  X X X
+    \end{verbatim}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \textbf{Pe\~{a}o no canto: 3 movimentos}
+    \begin{verbatim}
+  P X .
+  X X .
+  . . .
+    \end{verbatim}
+  \end{minipage}
+  \caption{Movimentos v\'{a}lidos a partir de posi\c{c}\~{o}es diferentes
+           (X = destino v\'{a}lido, P = pe\~{a}o).}
+  \label{fig:valid_moves}
+\end{figure}
+
+\subsection{Aplica\c{c}\~{a}o de Movimentos e Remo\c{c}\~{a}o}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Aplica um movimento e remove uma casa},
+    label={lst:apply_move},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+% Move o peao de From para To
+apply_move(Board, FromR, FromC, ToR, ToC, NewBoard) :-
+    get_cell(Board, FromR, FromC, Piece),  % le o simbolo
+    set_cell(Board, FromR, FromC, '.', B1),% limpa origem
+    set_cell(B1, ToR, ToC, Piece, NewBoard).% coloca no destino
+
+% Marca uma casa como permanentemente removida
+apply_remove(Board, Row, Col, NewBoard) :-
+    set_cell(Board, Row, Col, '#', NewBoard).
+\end{lstlisting}
+
+\subsection{Condi\c{c}\~{a}o de Fim de Jogo}
+
+O jogo termina quando o jogador cujo turno \'{e} jogar n\~{a}o tem nenhum
+movimento v\'{a}lido:
+
+\begin{lstlisting}[language=Prolog,
+    caption={Detec\c{c}\~{a}o de fim de jogo},
+    label={lst:game_over},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+game_over(Board, Player, P1Pos, P2Pos) :-
+    player_pos(Player, P1Pos, P2Pos, CR/CC),
+    \+ valid_move(Board, CR, CC, _, _).
+    % \+ significa negacao: true se valid_move FALHA
+\end{lstlisting}
+
+O operador \texttt{\textbackslash+} \'{e} a \textbf{nega\c{c}\~{a}o por falha} do Prolog:
+``\texttt{\textbackslash+~Goal}'' \'{e} verdade se e s\'{o} se \texttt{Goal} falha.
+Aqui, \texttt{game\_over} \'{e} verdade se n\~{a}o existe nenhum movimento v\'{a}lido.
+
+% ===================================================================
+\section{Intelig\^{e}ncia Artificial (\texttt{ai.pl})}
+\label{sec:ai}
+
+\subsection{O Princ\'{i}pio Minimax}
+\label{subsec:minimax}
+
+\subsubsection{Conceito e Analogia}
+
+O \textit{minimax} \'{e} o algoritmo cl\'{a}ssico para jogos de dois jogadores com
+informa\c{c}\~{a}o perfeita~\cite{russell2020artificial}.
+
+\textbf{Analogia:} imagine que voc\^{e} est\'{a} a jogar xadrez e quer decidir o
+melhor movimento. Pensa: ``Se eu jogar aqui, o meu advers\'{a}rio vai
+responder com o seu melhor movimento, e depois eu vou responder com o
+meu melhor, e assim por diante.'' O \textit{minimax} formaliza exatamente
+este racioc\'{i}nio.
+
+\subsubsection{Funcionamento}
+
+O algoritmo constr\'{o}i mentalmente uma \textbf{\'{a}rvore de jogo}:
+
+\begin{itemize}
+  \item \textbf{N\'{o}s MAX} (Jogador~1, s\'{i}mbolo \texttt{x}): escolhe o
+        movimento que \textbf{maximiza} a pontua\c{c}\~{a}o.
+  \item \textbf{N\'{o}s MIN} (Jogador~2, s\'{i}mbolo \texttt{o}): escolhe o
+        movimento que \textbf{minimiza} a pontua\c{c}\~{a}o (prejudica o Jogador~1).
+  \item \textbf{N\'{o}s folha} (profundidade~0 ou jogo terminado): a
+        posi\c{c}\~{a}o \'{e} avaliada por uma fun\c{c}\~{a}o heur\'{i}stica.
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{verbatim}
+               MAX [3]
+              /        \
+         MIN [3]       MIN [2]
+        /      \       /      \
+      [3]    [12]   [8]    [2]
+  \end{verbatim}
+  \caption{Exemplo de \'{a}rvore minimax com 2 n\'{i}veis.
+           O Jogador MAX escolhe o ramo com valor m\'{a}ximo;
+           o Jogador MIN escolhe o ramo com valor m\'{i}nimo.
+           O valor na raiz \'{e} 3.}
+  \label{fig:minimax_tree}
+\end{figure}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Implementa\c{c}\~{a}o do minimax puro},
+    label={lst:minimax},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+% Caso base 1: profundidade esgotada -> avaliacao estatica
+minimax(Board, _Player, P1Pos, P2Pos, 0, Value) :-
+    !, evaluate(Board, P1Pos, P2Pos, Value).
+
+% Caso base 2: jogador sem movimentos -> derrota terminal
+minimax(Board, Player, P1Pos, P2Pos, _D, Value) :-
+    player_pos(Player, P1Pos, P2Pos, CR/CC),
+    \+ valid_move(Board, CR, CC, _, _), !,
+    terminal_value(Player, Value).
+
+% Caso recursivo: gera filhos e aplica max/min
+minimax(Board, Player, P1Pos, P2Pos, Depth, Value) :-
+    all_move_pairs(Board, Player, P1Pos, P2Pos, Pairs),
+    NextD is Depth - 1,
+    Other is 3 - Player,        % 1->2, 2->1
+    maplist(minimax_child(Board, Player, Other,
+                          P1Pos, P2Pos, NextD),
+            Pairs, ChildValues),
+    ( Player =:= 1
+    -> max_list(ChildValues, Value)  % MAX escolhe o maior
+    ;  min_list(ChildValues, Value)  % MIN escolhe o menor
+    ).
+\end{lstlisting}
+
+\subsubsection{Valores Terminais}
+
+Quando um jogador fica sem movimentos, o jogo termina:
+
+\begin{lstlisting}[language=Prolog,
+    caption={Valores terminais},
+    label={lst:terminal},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+terminal_value(1, -1000). % Jogador 1 preso -> derrota (negativo)
+terminal_value(2,  1000). % Jogador 2 preso -> vitoria de P1 (positivo)
+\end{lstlisting}
+
+Os valores $\pm1000$ s\~{a}o intencionalmente muito maiores do que qualquer
+valor de avalia\c{c}\~{a}o heur\'{i}stica, garantindo que uma vit\'{o}ria ou derrota
+real \'{e} sempre preferida a um estado com boa heur\'{i}stica.
+
+% -------------------------------------------------------------------
+\subsection{Algoritmo Alfa-Beta}
+\label{subsec:alphabeta}
+
+\subsubsection{Conceito e Analogia}
+
+O \textit{minimax} \'{e} correto mas lento: explora todos os n\'{o}s da \'{a}rvore.
+O \textit{alfa-beta} \'{e} uma otimiza\c{c}\~{a}o que descarta ramos que \textbf{nunca
+podem influenciar o resultado}, sem alterar o valor final calculado.
+
+\textbf{Analogia:} imagine que est\'{a} a selecionar o melhor restaurante numa
+lista. J\'{a} visitou um restaurante com classifica\c{c}\~{a}o 8/10. Ao visitar o
+segundo restaurante, descobre que tem um prato horrível de 3/10. Sem sequer
+provar o resto da ementa, sabe que este restaurante nunca ser\'{a} a sua
+primeira escolha. \textbf{Pode ignorar o resto da visita} e passar ao
+pr\'{o}ximo. O alfa-beta faz exatamente o mesmo com ramos da \'{a}rvore de jogo.
+
+\subsubsection{Os Par\^{a}metros $\alpha$ e $\beta$}
+
+\begin{itemize}
+  \item $\alpha$ (\textit{alpha}) --- o melhor valor que o Jogador MAX j\'{a}
+        garantiu. Come\c{c}a em $-\infty$.
+  \item $\beta$ (\textit{beta}) --- o melhor valor que o Jogador MIN j\'{a}
+        garantiu. Come\c{c}a em $+\infty$.
+  \item \textbf{Corte beta} (em n\'{o} MAX): se o valor atual $\geq \beta$,
+        o Jogador MIN nunca escolheria este ramo. Pode parar.
+  \item \textbf{Corte alfa} (em n\'{o} MIN): se o valor atual $\leq \alpha$,
+        o Jogador MAX nunca escolheria este ramo. Pode parar.
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{verbatim}
+                MAX [3]
+               /        \
+          MIN [3]       MIN [?]
+         /      \       /      \
+       [3]    [12]   [2]   CORTADO
+                     ^
+          Alpha = 3, este MIN ja tem 2.
+          Como 2 < 3 (alpha), MAX nunca
+          escolheria este caminho.
+          Os filhos restantes sao cortados.
+  \end{verbatim}
+  \caption{Corte alfa: o Jogador MAX j\'{a} tem garantido o valor~3
+           (ramo esquerdo). No ramo direito, o MIN encontrou 2,
+           que \'{e} pior para MAX. Os restantes filhos do ramo
+           direito s\~{a}o descartados.}
+  \label{fig:alphabeta_cutoff}
+\end{figure}
+
+\subsubsection{Implementa\c{c}\~{a}o}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Pesquisa alfa-beta --- caso recursivo},
+    label={lst:alphabeta},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+alphabeta(Board, Player, P1Pos, P2Pos, Depth, Alpha, Beta,
+          Value, BM, BR) :-
+    all_move_pairs(Board, Player, P1Pos, P2Pos, Pairs),
+    order_pairs(Pairs, Board, Player, P1Pos, P2Pos, Ordered),
+    NextDepth is Depth - 1,
+    Other is 3 - Player,
+    ( Player =:= 1
+    ->  ab_max(Ordered, Board, Other, P1Pos, P2Pos,
+               Player, NextDepth, Alpha, Beta,
+               -10000, none, none, Value, BM, BR)
+    ;   ab_min(Ordered, Board, Other, P1Pos, P2Pos,
+               Player, NextDepth, Alpha, Beta,
+               10000, none, none, Value, BM, BR)
+    ).
+
+% No MAX: actualiza alpha e corta se alpha >= beta
+ab_max([move(MPos,RPos)|Rest], Board, Other, P1Pos, P2Pos,
+       CurPlayer, Depth, Alpha, Beta, BestVal, BestM, BestR,
+       Val, BM, BR) :-
+    apply_pair(Board, CurPlayer, P1Pos, P2Pos, MPos, RPos,
+               NewBoard, NewP1, NewP2),
+    alphabeta(NewBoard, Other, NewP1, NewP2, Depth,
+              Alpha, Beta, ChildVal, _, _),
+    ( (BestM = none ; ChildVal > BestVal)
+    ->  NewBest = ChildVal, NewBM = MPos, NewBR = RPos
+    ;   NewBest = BestVal, NewBM = BestM, NewBR = BestR
+    ),
+    NewAlpha is max(Alpha, NewBest),
+    ( NewAlpha >= Beta
+    ->  Val = NewBest, BM = NewBM, BR = NewBR  % corte beta
+    ;   ab_max(Rest, Board, Other, P1Pos, P2Pos,
+               CurPlayer, Depth, NewAlpha, Beta,
+               NewBest, NewBM, NewBR, Val, BM, BR)
+    ).
+\end{lstlisting}
+
+\subsubsection{Ganho de Desempenho}
+
+O corte alfa-beta reduz drasticamente o n\'{u}mero de n\'{o}s avaliados~\cite{knuth1975analysis}:
+
+\begin{table}[htbp]
+  \caption{Complexidade: minimax vs.\ alfa-beta}
+  \label{tab:complexity}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Algoritmo} & \textbf{Complexidade} & \textbf{N\'{o}s (b=8, d=4)} \\
+    \midrule
+    Minimax puro    & $O(b^d)$      & $8^4 = 4{.}096$ \\
+    Alfa-beta ideal & $O(b^{d/2})$  & $8^2 = 64$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Na pr\'{a}tica, considerando que cada movimento tem em m\'{e}dia~8 destinos
+poss\'{i}veis e 34 casas remov\'{i}veis num tabuleiro 6{\texttimes}6 inicial,
+o fator de ramifica\c{c}\~{a}o real \'{e} $\approx 102$ (ver
+Cap\'{i}tulo~\ref{chap:eval}). O alfa-beta com boa ordena\c{c}\~{a}o reduz este
+fator para $\approx \sqrt{102} \approx 10$ por n\'{i}vel.
+
+% -------------------------------------------------------------------
+\subsection{Ordena\c{c}\~{a}o de Movimentos}
+\label{subsec:ordering}
+
+A efic\'{a}cia do corte alfa-beta depende fortemente da ordem em que os
+movimentos s\~{a}o avaliados. Avaliar primeiro os movimentos mais
+prometedores maximiza os cortes.
+
+\textbf{Heur\'{i}stica implementada:}
+\begin{itemize}
+  \item \textbf{Movimentos centrais primeiro}: casas perto do centro do
+        tabuleiro oferecem mais op\c{c}\~{o}es futuras (maior mobilidade).
+  \item \textbf{Remo\c{c}\~{o}es pr\'{o}ximas do advers\'{a}rio primeiro}: remover casas
+        adjacentes ao advers\'{a}rio reduz mais rapidamente a sua mobilidade.
+\end{itemize}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Fun\c{c}\~{a}o de pontua\c{c}\~{a}o para ordena\c{c}\~{a}o de movimentos},
+    label={lst:ordering},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+score_pair(Center, OppR, OppC,
+           move(MR/MC, RR/RC),
+           Score-move(MR/MC, RR/RC)) :-
+    MDR is abs(MR - Center), MDC is abs(MC - Center),
+    MoveScore is MDR + MDC,    % menor = mais central
+    RDR is abs(RR - OppR), RDC is abs(RC - OppC),
+    RemScore is RDR + RDC,     % menor = mais perto do adversario
+    Score is MoveScore * 3 - RemScore. % peso: movimento > remocao
+\end{lstlisting}
+
+% -------------------------------------------------------------------
+\subsection{Fun\c{c}\~{a}o de Avalia\c{c}\~{a}o}
+\label{subsec:eval_func}
+
+Quando a pesquisa atinge a profundidade m\'{a}xima (sem o jogo ter
+terminado), \'{e} necess\'{a}rio avaliar heuristicamente a posi\c{c}\~{a}o atual.
+
+\textbf{Dois crit\'{e}rios foram escolhidos:}
+
+\begin{enumerate}
+  \item \textbf{Mobilidade} --- o n\'{u}mero de movimentos legais dispon\'{i}veis.
+        Um jogador com mais movimentos tem mais liberdade e est\'{a} mais longe
+        de ser isolado. Este crit\'{e}rio tem peso~10.
+  \item \textbf{Centralidade} --- qu\~{a}o pr\'{o}ximo est\'{a} o pe\~{a}o do centro
+        do tabuleiro. O centro oferece mais dire\c{c}\~{o}es de fuga.
+        Este crit\'{e}rio serve para desempatar.
+\end{enumerate}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Fun\c{c}\~{a}o de avalia\c{c}\~{a}o heur\'{i}stica},
+    label={lst:evaluate},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+evaluate(Board, P1Pos, P2Pos, Value) :-
+    P1Pos = P1R/P1C, P2Pos = P2R/P2C,
+    valid_moves(Board, P1R, P1C, M1), length(M1, S1), % mobilidade P1
+    valid_moves(Board, P2R, P2C, M2), length(M2, S2), % mobilidade P2
+    board_size(Board, Size),
+    Center is (Size - 1) / 2.0,
+    centrality(P1R, P1C, Center, Cent1),
+    centrality(P2R, P2C, Center, Cent2),
+    Value is (S1 - S2) * 10 + (Cent1 - Cent2).
+    % positivo = bom para P1; negativo = bom para P2
+\end{lstlisting}
+
+\textbf{Exemplo pr\'{a}tico:} num tabuleiro 3{\texttimes}3 com P1 no canto (0,0)
+e P2 no centro (1,1), o c\'{a}lculo \'{e}:
+\begin{itemize}
+  \item Mobilidade P1 = 2 movimentos (confinado ao canto)
+  \item Mobilidade P2 = 7 movimentos (centro, m\'{a}xima liberdade)
+  \item Diferen\c{c}a de mobilidade: $(2-7) \times 10 = -50$
+  \item Centralidade: $(0+0) - (1+1) = -2$ (P2 est\'{a} mais ao centro)
+  \item Pontua\c{c}\~{a}o total: $-50 + (-2) = -52$
+\end{itemize}
+O valor negativo indica que P2 est\'{a} em clara vantagem --- o que \'{e} correto:
+P2 no centro tem muito mais liberdade.
+
+\textbf{Justifica\c{c}\~{a}o da escolha:} a mobilidade \'{e} o indicador mais direto
+de quanto um jogador est\'{a} pr\'{o}ximo de ser isolado. A centralidade captura
+a tend\^{e}ncia estrat\'{e}gica de manter o pe\~{a}o no centro do tabuleiro.
+
+% ===================================================================
+\section{Interface de Jogo (\texttt{game.pl})}
+\label{sec:game_loop}
+
+\subsection{Fluxo do Programa}
+
+O jogo segue o seguinte fluxo:
+
+\begin{enumerate}
+  \item \texttt{play/0} --- exibe o menu principal.
+  \item \texttt{main\_menu/0} --- permite escolher o modo de jogo
+        (humano-humano, humano-IA, IA-IA).
+  \item \texttt{setup\_game/2} --- configura o tamanho do tabuleiro e a
+        profundidade de pesquisa da IA.
+  \item \texttt{start\_game/4} --- cria o tabuleiro inicial com os pe\~{o}es
+        nos cantos opostos.
+  \item \texttt{game\_loop/6} --- ciclo principal: exibe o tabuleiro,
+        verifica fim de jogo, executa o turno do jogador corrente.
+\end{enumerate}
+
+\begin{lstlisting}[language=Prolog,
+    caption={Ciclo principal do jogo},
+    label={lst:game_loop},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+game_loop(Board, Turn, P1Pos, P2Pos, Mode, Depth) :-
+    display_game(Board, Turn),
+    ( game_over(Board, Turn, P1Pos, P2Pos)
+    ->  Winner is 3 - Turn,  % o adversario venceu
+        announce_winner(Winner, Board),
+        play_again
+    ;   execute_turn(Board, Turn, P1Pos, P2Pos,
+                     Mode, Depth,
+                     NewBoard, NewP1, NewP2),
+        NextTurn is 3 - Turn,  % alterna: 1->2, 2->1
+        game_loop(NewBoard, NextTurn, NewP1, NewP2,
+                  Mode, Depth)
+    ).
+\end{lstlisting}
+
+\subsection{Turno Humano vs.\ Turno IA}
+
+Quando o turno pertence a um jogador humano, o programa pede a
+entrada no formato \texttt{Linha/Coluna.} (com ponto final, pois o
+SWI-Prolog interpreta a entrada como um termo Prolog completo):
+
+\begin{verbatim}
+Move (linha/coluna, ex: 1/2): 1/1.
+Remove uma casa (linha/coluna): 2/2.
+\end{verbatim}
+
+Quando o turno pertence \`{a} IA, o predicado \texttt{best\_move/7}
+\'{e} invocado automaticamente, que executa o alfa-beta e devolve o
+par (movimento, remo\c{c}\~{a}o) \'{o}timo.
+
+% ===================================================================
+\section{Utiliza\c{c}\~{a}o de Intelig\^{e}ncia Artificial no Desenvolvimento}
+\label{sec:ai_usage}
+
+Ao longo do desenvolvimento deste projeto, a IA generativa
+(nomeadamente o modelo Claude da Anthropic) foi utilizada de forma
+extensa e integrada em todas as fases do trabalho. A sua utiliza\c{c}\~{a}o
+n\~{a}o se limitou a gerar c\'{o}digo, mas abrangeu todo o processo de
+aprendizagem e desenvolvimento:
+
+\begin{enumerate}
+  \item \textbf{Aprendizagem de conceitos:} a IA foi consultada para
+        compreender os fundamentos do Prolog (unifica\c{c}\~{a}o,
+        \textit{backtracking}, listas, predicados embutidos) atrav\'{e}s
+        de explica\c{c}\~{o}es, exemplos e analogias.
+
+  \item \textbf{Compreens\~{a}o dos algoritmos:} o princ\'{i}pio
+        \textit{minimax} e o algoritmo \textit{alfa-beta} foram
+        explorados com a assist\^{e}ncia da IA, que forneceu
+        explica\c{c}\~{o}es passo a passo, diagramas de \'{a}rvores e
+        an\'{a}lise de complexidade.
+
+  \item \textbf{Explora\c{c}\~{a}o de alternativas:} foram discutidas
+        diferentes abordagens para a representa\c{c}\~{a}o do tabuleiro
+        (lista de listas vs.\ tabela de hash), para a fun\c{c}\~{a}o de
+        avalia\c{c}\~{a}o (mobilidade, centralidade, dist\^{a}ncia entre
+        pe\~{o}es) e para a ordena\c{c}\~{a}o de movimentos.
+
+  \item \textbf{Escrita e depura\c{c}\~{a}o de c\'{o}digo:} a IA auxiliou na
+        escrita de predicados, na corre\c{c}\~{a}o de erros l\'{o}gicos
+        (incluindo um \textit{bug} na acumula\c{c}\~{a}o de valores no
+        alfa-beta), e na formula\c{c}\~{a}o dos 33 testes unit\'{a}rios.
+
+  \item \textbf{Elabora\c{c}\~{a}o do relat\'{o}rio:} a IA foi utilizada para
+        auxiliar na reda\c{c}\~{a}o, estrutura\c{c}\~{a}o e revis\~{a}o deste
+        documento, com o objetivo de tornar as explica\c{c}\~{o}es claras
+        e acess\'{i}veis.
+\end{enumerate}
+
+Em todos os casos, o uso da IA foi orientado pelos objetivos
+did\'{a}ticos da unidade curricular: a IA serviu como ferramenta de
+aprendizagem e produtividade, e n\~{a}o como substituto da
+compreens\~{a}o dos conceitos.

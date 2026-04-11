@@ -1,17 +1,17 @@
 \abstractPT  % Do NOT modify this line
 
-O objectivo deste documento é uniformizar a apresentação dos trabalhos escolares de licenciatura, trabalhos de investigação científicos e dissertações de mestrado.
-
-Independentemente da língua em que está escrita o documento, é necessário um resumo na língua do texto principal e um resumo noutra língua.  Assume-se que as duas línguas em questão serão sempre o Português e o Inglês.
-
-Resumo é a versão precisa, sintética e selectiva do texto do documento, destacando os elementos de maior importância. O resumo possibilita a maior divulgação do trabalho e a sua indexação em bases de dados.
-
-O resumo não deve conter citações bibliográficas, tabelas, quadros, esquemas. Deve evitar o uso de abreviaturas e siglas - quando absolutamente necessário, citá-las entre parênteses e precedidas da explicação de seu significado, na primeira vez em que aparecem. 
-
-E, deve-se evitar o uso de expressões como ``O presente trabalho trata $\ldots$'', ``O documento conclui que $\ldots$'', ``aparentemente é $\ldots$'' etc. 
-
-Existe um limite de palavras, 150 palavras é o limite.
-
-\begin{center}
-	\textbf{\large this package and template are not official for ISEL/IPL}.
-\end{center}
+Este trabalho documenta a implementa\c{c}\~{a}o do jogo de estrat\'{e}gia \textit{ISOLA} em
+SWI-Prolog, no \^{a}mbito da unidade curricular de Intelig\^{e}ncia Artificial.
+O jogo foi representado atrav\'{e}s de listas de listas em Prolog, com
+predicados para gera\c{c}\~{a}o de movimentos, aplica\c{c}\~{a}o de jogadas e
+detec\c{c}\~{a}o de fim de jogo. A intelig\^{e}ncia artificial do jogador
+computorizado baseia-se no algoritmo \textit{alfa-beta}, uma implementa\c{c}\~{a}o
+eficiente do princ\'{i}pio \textit{minimax}, complementada com ordena\c{c}\~{a}o
+heur\'{i}stica de movimentos. A fun\c{c}\~{a}o de avalia\c{c}\~{a}o combina mobilidade
+e centralidade. Foram realizados testes unit\'{a}rios (33 testes, todos bem
+sucedidos) e benchmarks experimentais em tabuleiros de dimens\~{o}es e
+profundidades variadas. Os resultados confirmam que a profundidade~4
+\'{e} praticável em tabuleiros 3{\texttimes}3, mas exige tempo elevado
+em tabuleiros 6{\texttimes}6 (cerca de 2~min~47~s no primeiro
+movimento), justificando a profundidade~2 como compromisso para
+tabuleiros maiores.

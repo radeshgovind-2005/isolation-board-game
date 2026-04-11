@@ -1,45 +1,135 @@
-\chapter{Applied Survival Analysis by Hosmer and Lemeshow} 
-\label{anexo1}
-Stata Textbook Examples
-Applied Survival Analysis by Hosmer and Lemeshow \cite{newtest}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  appendix1.tex  --  Codigo Fonte (excertos principais)
+%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
+%  Inteligencia Artificial, ISEL 2025/2026
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The data files used for the examples in this text can be downloaded in a zip file from the Wiley FTP website or the Stata Web site.
+\chapter{C\'{o}digo Fonte}
+\label{app:code}
 
-\lstset{language=R,frame=none,numbers=left,escapechar=|,morekeywords={},caption=,label=code:newtest}
-\begin{lstlisting}    
-# The R package(s) needed for this chapter is the survival package. 
-# We currently use R 2.0.1 patched version. You may want to make sure 
-# that packages on your local machine are up to date. You can perform 
-# updating in R using update.packages() function.
+Este ap\^{e}ndice apresenta os predicados centrais de cada m\'{o}dulo do
+projeto. O c\'{o}digo completo encontra-se no reposit\'{o}rio do projeto.
 
-# url: http://www.ats.ucla.edu/stat/r/examples/
-# data set is hmohiv.csv.
-hmohiv<-read.table("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv", sep=",", header = TRUE)
-attach(hmohiv)
-hmohiv
+% -------------------------------------------------------------------
+\section{board.pl --- Tabuleiro}
 
-# using the hmohiv data set. To control the type of symbol, a variable called psymbol is created. 
-# It takes value 1 and 2, so the symbol type will be 1 and 2. 
-psymbol<-censor+1
-table(psymbol)
+\begin{lstlisting}[language=Prolog,
+    caption={board.pl --- cria\c{c}\~{a}o e manipula\c{c}\~{a}o do tabuleiro},
+    label={lst:board_full},
+    numbers=left,
+    basicstyle=\footnotesize\ttfamily,
+    frame=single]
+initial_board(Size, Board) :-
+    length(Board, Size),
+    maplist(make_row(Size), Board).
 
-plot(age, time, pch=(psymbol))
-legend(40, 60, c("Censor=1", "Censor=0"), pch=(psymbol))
+make_row(Size, Row) :-
+    length(Row, Size),
+    maplist(=('.'), Row).
 
-age1<-1000/age
-plot(age1, time, pch=(psymbol))
-legend(40, 30, c("Censor=1", "Censor=0"), pch=(psymbol))
+get_cell(Board, Row, Col, Cell) :-
+    board_size(Board, Size),
+    Row >= 0, Row < Size, Col >= 0, Col < Size,
+    nth0(Row, Board, RowList),
+    nth0(Col, RowList, Cell).
 
-# Package "survival" is needed for this analysis and for most of the analyses in the book.
-library(survival)
-test <- survreg( Surv(time, censor) ~ age, dist="exponential")
-summary(test)
+set_cell(Board, Row, Col, Value, NewBoard) :-
+    nth0(Row, Board, OldRow, RestRows),
+    nth0(Col, OldRow, _, RestCols),
+    nth0(Col, NewRow, Value, RestCols),
+    nth0(Row, NewBoard, NewRow, RestRows).
 
-pred <- predict(test, type="response") 
-ord<-order(age)
-age_ord<-age[ord]
-pred_ord<-pred[ord]
-plot(age, time, pch=(psymbol))
-lines(age_ord, pred_ord)
-legend(40, 60, c("Censor=1", "Censor=0"), pch=(psymbol))
+empty_cell('.').
+\end{lstlisting}
+
+% -------------------------------------------------------------------
+\section{rules.pl --- Regras do Jogo}
+
+\begin{lstlisting}[language=Prolog,
+    caption={rules.pl --- valida\c{c}\~{a}o e aplica\c{c}\~{a}o de movimentos},
+    label={lst:rules_full},
+    numbers=left,
+    basicstyle=\footnotesize\ttfamily,
+    frame=single]
+valid_move(Board, FromR, FromC, ToR, ToC) :-
+    board_size(Board, Size), Max is Size - 1,
+    member(DR, [-1,0,1]), member(DC, [-1,0,1]),
+    \+ (DR =:= 0, DC =:= 0),
+    ToR is FromR + DR, ToC is FromC + DC,
+    ToR >= 0, ToR =< Max, ToC >= 0, ToC =< Max,
+    get_cell(Board, ToR, ToC, '.').
+
+valid_removes(Board, P1R, P1C, P2R, P2C, Removes) :-
+    board_size(Board, Size), Max is Size - 1,
+    findall(R/C,
+        (between(0,Max,R), between(0,Max,C),
+         \+(R=:=P1R, C=:=P1C), \+(R=:=P2R, C=:=P2C),
+         get_cell(Board, R, C, '.')),
+        Removes).
+
+apply_move(Board, FromR, FromC, ToR, ToC, NewBoard) :-
+    get_cell(Board, FromR, FromC, Piece),
+    set_cell(Board, FromR, FromC, '.', B1),
+    set_cell(B1, ToR, ToC, Piece, NewBoard).
+
+apply_remove(Board, Row, Col, NewBoard) :-
+    set_cell(Board, Row, Col, '#', NewBoard).
+
+game_over(Board, Player, P1Pos, P2Pos) :-
+    player_pos(Player, P1Pos, P2Pos, CR/CC),
+    \+ valid_move(Board, CR, CC, _, _).
+\end{lstlisting}
+
+% -------------------------------------------------------------------
+\section{ai.pl --- Algoritmo Alfa-Beta}
+
+\begin{lstlisting}[language=Prolog,
+    caption={ai.pl --- ponto de entrada e pesquisa alfa-beta},
+    label={lst:ai_full},
+    numbers=left,
+    basicstyle=\footnotesize\ttfamily,
+    frame=single]
+best_move(Board, Player, P1Pos, P2Pos, Depth, MovePos, RemPos) :-
+    alphabeta(Board, Player, P1Pos, P2Pos, Depth,
+              -10000, 10000, _Val, BM, BR),
+    ( BM = none
+    ->  any_legal_move(Board, Player, P1Pos, P2Pos,
+                       MovePos, RemPos)
+    ;   MovePos = BM, RemPos = BR
+    ).
+
+alphabeta(Board, _Player, P1Pos, P2Pos, 0, _A, _B,
+          Value, none, none) :-
+    !, evaluate(Board, P1Pos, P2Pos, Value).
+
+alphabeta(Board, Player, P1Pos, P2Pos, _D, _A, _B,
+          Value, none, none) :-
+    player_pos(Player, P1Pos, P2Pos, CR/CC),
+    \+ valid_move(Board, CR, CC, _, _), !,
+    terminal_value(Player, Value).
+
+alphabeta(Board, Player, P1Pos, P2Pos, Depth, Alpha, Beta,
+          Value, BM, BR) :-
+    all_move_pairs(Board, Player, P1Pos, P2Pos, Pairs),
+    order_pairs(Pairs, Board, Player, P1Pos, P2Pos, Ordered),
+    NextDepth is Depth - 1,
+    Other is 3 - Player,
+    ( Player =:= 1
+    ->  ab_max(Ordered, Board, Other, P1Pos, P2Pos,
+               Player, NextDepth, Alpha, Beta,
+               -10000, none, none, Value, BM, BR)
+    ;   ab_min(Ordered, Board, Other, P1Pos, P2Pos,
+               Player, NextDepth, Alpha, Beta,
+               10000, none, none, Value, BM, BR)
+    ).
+
+evaluate(Board, P1Pos, P2Pos, Value) :-
+    P1Pos = P1R/P1C, P2Pos = P2R/P2C,
+    valid_moves(Board, P1R, P1C, M1), length(M1, S1),
+    valid_moves(Board, P2R, P2C, M2), length(M2, S2),
+    board_size(Board, Size),
+    Center is (Size - 1) / 2.0,
+    centrality(P1R, P1C, Center, Cent1),
+    centrality(P2R, P2C, Center, Cent2),
+    Value is (S1 - S2) * 10 + (Cent1 - Cent2).
 \end{lstlisting}

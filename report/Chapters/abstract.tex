@@ -1,9 +1,16 @@
 \abstractEN % Do NOT modify this line
 
-The report must contain two versions of the abstract, one in the same language as the main text and another in a different language. The package assumes the two languages under consideration are always Portuguese and English. 
-
-The abstract is critical because many researchers will read only that part. Your abstract should provide an accurate and sufficiently detailed summary of your work so that readers will understand what you did, why you did it, what your findings are, and why your results are valuable and essential. 
-
-The abstract should not contain bibliography citations, tables, charts or diagrams. Abbreviations should be limited. Abbreviations defined in the abstract must be explained again at first use in the main text. 
-
-Finally, you must avoid the use of expressions such as "The present work deals with ($\ldots$) ", "The document concludes that ($\ldots$) ", "apparently and ($\ldots$) ", etc. The word limit should be observed; 150 words is the limit.
+This report documents the implementation of the ISOLA strategy board game
+in SWI-Prolog, developed as part of the Artificial Intelligence course.
+The game state is represented as a list of lists in Prolog, with predicates
+for move generation, move application, and end-game detection.
+The computer player's artificial intelligence is based on the alpha-beta
+algorithm, an efficient implementation of the minimax principle,
+enhanced with heuristic move ordering.
+The evaluation function combines mobility and board centrality.
+Unit testing comprised 33 tests, all passing.
+Experimental benchmarks across varying board sizes and search depths
+show that depth 4 is practical on 3$\times$3 boards (136\,ms),
+but becomes prohibitive on 6$\times$6 boards (approximately
+167\,s for the first move), making depth 2 the recommended
+compromise for larger boards.

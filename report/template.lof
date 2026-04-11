@@ -1,0 +1,15 @@
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Evolu\c {c}\~{a}o de um jogo ISOLA 6{\texttimes }6. O s\'{i}mbolo \texttt {\#} representa uma casa permanentemente removida.}}{2}{figure.caption.9}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Movimentos v\'{a}lidos a partir de posi\c {c}\~{o}es diferentes (X = destino v\'{a}lido, P = pe\~{a}o).}}{7}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Exemplo de \'{a}rvore minimax com 2 n\'{i}veis. O Jogador MAX escolhe o ramo com valor m\'{a}ximo; o Jogador MIN escolhe o ramo com valor m\'{i}nimo. O valor na raiz \'{e} 3.}}{8}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Corte alfa: o Jogador MAX j\'{a} tem garantido o valor~3 (ramo esquerdo). No ramo direito, o MIN encontrou 2, que \'{e} pior para MAX. Os restantes filhos do ramo direito s\~{a}o descartados.}}{10}{figure.caption.13}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

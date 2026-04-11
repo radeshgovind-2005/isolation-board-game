@@ -1,0 +1,153 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{debug/global//global/global/global}
+  \entry{bratko2001prolog}{book}{}{}
+    \name{author}{1}{}{%
+      {{hash=BI}{%
+         family={Bratko},
+         familyi={B\bibinitperiod},
+         given={Ivan},
+         giveni={I\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Addison-Wesley}%
+    }
+    \strng{namehash}{BI1}
+    \strng{fullhash}{BI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{edition}{Third}
+    \field{title}{Prolog Programming for Artificial Intelligence}
+    \field{year}{2001}
+  \endentry
+
+  \entry{kienitz1972isola}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=KB}{%
+         family={Kienitz},
+         familyi={K\bibinitperiod},
+         given={Bernd},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KB1}
+    \strng{fullhash}{KB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{note}{Abstract strategy game for two players}
+    \field{title}{ISOLA --- Isolation Strategy Board Game}
+    \field{year}{1972}
+  \endentry
+
+  \entry{knuth1975analysis}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=KDE}{%
+         family={Knuth},
+         familyi={K\bibinitperiod},
+         given={Donald\bibnamedelima E.},
+         giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=MRW}{%
+         family={Moore},
+         familyi={M\bibinitperiod},
+         given={Ronald\bibnamedelima W.},
+         giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier}%
+    }
+    \strng{namehash}{KDEMRW1}
+    \strng{fullhash}{KDEMRW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{number}{4}
+    \field{pages}{293\bibrangedash 326}
+    \field{title}{An analysis of alpha-beta pruning}
+    \field{volume}{6}
+    \field{journaltitle}{Artificial Intelligence}
+    \field{year}{1975}
+  \endentry
+
+  \entry{russell2020artificial}{book}{}{}
+    \name{author}{2}{}{%
+      {{hash=RS}{%
+         family={Russell},
+         familyi={R\bibinitperiod},
+         given={Stuart},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=NP}{%
+         family={Norvig},
+         familyi={N\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Pearson}%
+    }
+    \strng{namehash}{RSNP1}
+    \strng{fullhash}{RSNP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{edition}{Fourth}
+    \field{title}{Artificial Intelligence: A Modern Approach}
+    \field{year}{2020}
+  \endentry
+
+  \entry{sterling1994art}{book}{}{}
+    \name{author}{2}{}{%
+      {{hash=SL}{%
+         family={Sterling},
+         familyi={S\bibinitperiod},
+         given={Leon},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=SE}{%
+         family={Shapiro},
+         familyi={S\bibinitperiod},
+         given={Ehud},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {MIT Press}%
+    }
+    \strng{namehash}{SLSE1}
+    \strng{fullhash}{SLSE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{edition}{Second}
+    \field{title}{The Art of Prolog: Advanced Programming Techniques}
+    \field{year}{1994}
+  \endentry
+\enddatalist
+\endinput

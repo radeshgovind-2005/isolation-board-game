@@ -90,6 +90,19 @@
 
 % Force word hyphenation
 \hyphenation{e-xem-plo}
+
+% Define Prolog language for listings
+\lstdefinelanguage{Prolog}{
+  morekeywords={is,mod,not,true,fail,halt,assert,retract,
+                findall,bagof,setof,between,member,length,
+                append,nth0,nth1,maplist,foldl,succ,plus,
+                write,writeln,read,nl,format,tab,
+                use_module,ensure_loaded,initialization,
+                module,use_module,begin_tests,end_tests,test},
+  sensitive=false,
+  morecomment=[l]{\%},
+  morestring=[b]"
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Some default values that you may whish to override
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

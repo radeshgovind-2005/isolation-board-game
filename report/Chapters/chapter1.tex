@@ -1,120 +1,272 @@
-% 
-%  chapter1.tex
-%  
-%  Created by Matilde Pós-de-Mina Pato on 2012/10/09.
-%
-\chapter{Introdução}
-\label{cha:introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  chapter1.tex  --  Introducao
+%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
+%  Inteligencia Artificial, ISEL 2025/2026
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Linguagem e estilo}
-Qualquer trabalho deverá ser escrito como um artigo, i.e. a linguagem deve ser clara, objectiva, escrita em discurso directo e com frases curtas \cite{gustavii2016write, glasman2010science}.
+\chapter{Introdu\c{c}\~{a}o}
+\label{chap:intro}
 
-A redação deve ser feita com frases curtas e objectivas, organizadas de acordo com a estrutura do trabalho, dando destaque a cada uma das partes abordadas, assim apresentadas: Introdução - Informar, em poucas palavras, o contexto em que o trabalho se insere, sintetizando a problemática estudada. Objetivo - Deve ser explicitado claramente. Métodos - Destacar os procedimentos metodológicos adoptados. Resultados - Destacar os mais relevantes para os objectivos pretendidos. Os trabalhos de natureza quantitativa devem apresentar resultados numéricos, assim como seu significado estatístico. Conclusões - Destacar as conclusões mais relevantes, os estudos adicionais recomendados e os pontos positivos e negativos que poderão influir no conhecimento. 
+\section{O Jogo ISOLA}
+\label{sec:game}
 
-\paragraph{Parágrafo}
-\begin{enumerate}
-\item Um parágrafo  deve iniciar-se com uma frase curta e que contém a informação principal. As restantes devem acompanhar o conteúdo apresentado na primeira. A última deve fazer a ligação ao parágrafo seguinte.
-\item Os parágrafos devem interligar-se de forma lógica.
-\end{enumerate}
+\textit{ISOLA} (tamb\'{e}m conhecido como \textit{Isolation} ou \textit{Solitude}) \'{e} um jogo
+de estrat\'{e}gia para dois jogadores criado por Bernd Kienitz em 1972~\cite{kienitz1972isola}. O objetivo \'{e}
+simples: isolar o pe\~{a}o do advers\'{a}rio de modo a que ele n\~{a}o consiga realizar
+nenhum movimento v\'{a}lido no seu turno.
 
-\paragraph{Estrutura}
+\subsection{Regras do Jogo}
+\label{subsec:rules}
 
-O limite de páginas para cada UC será estipulado pelo docente e pode contemplar as seguintes partes: 
-\begin{enumerate}
-\item[Título] curto mas não genérico.
-\item[Capa] Use a capa apresentada neste documento. Complete a informação apresentada no ficheiro \texttt{datas.tex}.
-\item[Resumo] Faça um resumo dos conteúdos do trabalho e apresente as conclusões básicas, \texttt{resumo.tex} e \texttt{abstract.tex} (se necessário, c.c. comente a linha 155 de \texttt{template.tex}).
-\item[Índice] Indique as páginas dos títulos e subtítulos, figuras ou tabelas. O código que suporta algum parágrafo deve constar no índice respectivo, de Listagens.
-\item[Introdução] Contextualize o tema e indique o objectivo de estudo.
-\item[Desenvolvimento] Descreva as definições, modelos e teorias suportados por referências bibliográficas. 
-\item[Conclusão] Sintetize os aspectos relevantes.
-\item[Bibliografia] Escreva todas as referências indicadas no texto.
-\item[Anexos] Use os anexos para colocar outras informações que considere oportunas, mas não relevantes o suficiente para colocar no corpo do documento. 
-\end{enumerate}
+O tabuleiro \'{e} uma grelha quadrada (normalmente 6{\texttimes}6). Cada jogador possui
+um pe\~{a}o que come\c{c}a em cantos opostos do tabuleiro:
 
-\paragraph{Bibliografia}
-As referências são listadas pela ordem alfabética do apelido dos autores e depois por ordem cronológica quando o nome se repetir, \textit{package: plainnat}. 
+\begin{itemize}
+  \item \textbf{Jogador~1} (\texttt{x}) come\c{c}a na posi\c{c}\~{a}o
+        (linha~0, coluna~0) --- canto superior esquerdo.
+  \item \textbf{Jogador~2} (\texttt{o}) come\c{c}a na posi\c{c}\~{a}o
+        (linha~5, coluna~5) --- canto inferior direito.
+\end{itemize}
+
+Em cada turno, um jogador executa obrigatoriamente \textbf{duas a\c{c}\~{o}es}:
 
 \begin{enumerate}
-\item[Livros] Deve constar o nome original de um livro escrito em língua estrangeira. Pede-se que seja inserido as páginas consultadas. 
-\item[websites] Os sítios da internet consultados também devem constar nas referências. Pede-se que seja introduzido o dia de consulta do mesmo.
-\item[Artigos] Deve citar aqueles que se encontram indexados e submetidos a revisão independente. No instituto Thomson Reuters são fornecidas listas de toda a bibliografia que obedece a esse grau de exigência.
-\item[Trabalhos] Se a citação for relativa a uma comunicação pessoal, então faça-o do modo seguinte: M. Mjhdsh (comunicação pessoal, 13 de Março 2017). Noutros trabalhos deve constar a seguinte informação: ``Dissertação (ou, Relatório) de Mestrado (ou Doutoramento, ou Final de Curso) não publicada(o). 
+  \item \textbf{Mover} o seu pe\~{a}o para uma casa adjacente livre
+        (horizontal, vertical ou diagonalmente --- tal como um rei no
+        xadrez, mas apenas um passo de cada vez).
+  \item \textbf{Remover} qualquer casa vazia do tabuleiro (exceto as casas
+        ocupadas pelos pe\~{o}es), marcando-a como permanentemente
+        inacess\'{i}vel (\texttt{\#}).
 \end{enumerate}
 
-Por uma questão de simplificação, pode recorrer ao  Google Académico\footnote{scholar.google.pt/} e retirar a informação que consta no sítio \texttt{Citar} no formato BibTeX e inserir no ficheiro \texttt{bibliography.bib}. Por exemplo:
-\footnotesize
-\begin{verbatim}
-@book{gustavii2016write,
-  title={How to write and illustrate a scientific paper},
-  author={Gustavii, Bj{\"o}rn},
-  year={2016},
-  publisher={Cambridge University Press}
-}
-\end{verbatim}
+\textbf{N\~{a}o \'{e} permitido} saltar por cima do advers\'{a}rio nem entrar em
+casas j\'{a} removidas. Vence o jogador que fizer com que o advers\'{a}rio n\~{a}o
+tenha qualquer movimento v\'{a}lido no in\'{i}cio do seu turno.
 
-\paragraph{Relatórios de Sistemas de Informação}
+\subsection{Exemplo de Jogo}
+\label{subsec:example}
 
-Caracteres especiais para Álgebra Relacional
+O exemplo abaixo mostra a evolu\c{c}\~{a}o de um jogo numa grelha 6{\texttimes}6.
+No estado inicial, o Jogador~1 move-se de (0,0) para (1,1) e remove
+a casa (2,2).
 
-\begin{table}[!htb]
-\begin{minipage}{.5\textwidth}
- \caption{Simbolos lógicos e outros}
- \centering  
-\begin{tabular}{|l|c|r|}
-\hline
-Logical AND & 	$\wedge$ \\
-Logical OR & 	$\vee$ \\
-Logical NOT & 	$\neg$ \\
-null & 			$\omega$ \\
-\hline
-\end{tabular}
-\vskip1em
-\caption{Operadores unários}
- \centering  
-\begin{tabular}{|l|c|r|}
-\hline
-selecção &  $\select_{cname<cname2} E$ \\
-projecção &  $\project_{cname} E$ \\
-função de agregação &  $_{g_1,g_2,\ldots} \aggregatefn_{h_1,h_2,\ldots,h_m}$ \\
-\hline
-\end{tabular}
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \textbf{Estado inicial}
+    \begin{verbatim}
+       0  1  2  3  4  5
+    +------------------
+ 0  |  x  .  .  .  .  .
+ 1  |  .  .  .  .  .  .
+ 2  |  .  .  .  .  .  .
+ 3  |  .  .  .  .  .  .
+ 4  |  .  .  .  .  .  .
+ 5  |  .  .  .  .  .  o
+    \end{verbatim}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.45\textwidth}
+    \centering
+    \textbf{Ap\'{o}s P1 mover (0,0)$\to$(1,1), remover (2,2)}
+    \begin{verbatim}
+       0  1  2  3  4  5
+    +------------------
+ 0  |  .  .  .  .  .  .
+ 1  |  .  x  .  .  .  .
+ 2  |  .  .  #  .  .  .
+ 3  |  .  .  .  .  .  .
+ 4  |  .  .  .  .  .  .
+ 5  |  .  .  .  .  .  o
+    \end{verbatim}
+  \end{minipage}
+  \caption{Evolu\c{c}\~{a}o de um jogo ISOLA 6{\texttimes}6.
+           O s\'{i}mbolo \texttt{\#} representa uma casa
+           permanentemente removida.}
+  \label{fig:game_example}
+\end{figure}
 
-\end{minipage}%
-\quad
-\begin{minipage}{.5\textwidth}
-\centering
-\caption{Operadores binários}
-\begin{tabular}{|l|c|r|}
-\hline
-união & 			\union \\
-intersecção & 		\intersection \\
-diferença & 		- \\
-produto cartesiano & \cross \\
-divisão & 			$\div$ \\
-renomeação & 			$\rho$ \\
-junção natural& 		$\bowtie$ \\
-junção theta & 		$\bowtie_{\theta}$ \\
-semi-junção à esquerda & 	$\leftsemijoin$ \\
-semi-junção à direita & 	$\rightsemijoin$ \\ 
-junção externa à esquerda & 	$\leftouterjoin$ \\
-junção externa à direita & 	$\rightouterjoin$ \\
-junção externa completa & 	$\fullouterjoin$ \\
-anti-junção & 			? \\
-\hline
-\end{tabular}
-    \end{minipage} 
-\end{table}
+A estrat\'{e}gia consiste em manter o pr\'{o}prio pe\~{a}o com muitas op\c{c}\~{o}es de
+movimento (\textbf{mobilidade}) enquanto se reduz progressivamente a
+mobilidade do advers\'{a}rio, acabando por o isolar completamente.
 
-Exemplo (\textit{Your \LaTeX  ~skills are likely superior to mine!}):
-\begin{displaymath}
-Grades \leftarrow \project_{(students.ssn, students.name, grades.grade)} \\
-(\select_{students.ccn = grades.ccn \wedge grades.assignment = 1} \\
-(students \cross grades)) \\
-\end{displaymath}
-\vskip-1em
-\begin{eqnarray*}
-Grades & \leftarrow & \project_{(students.ssn, students.name, grades.grade)}  \\
-       &            &(\select_{(students.ssn, students.name, grades.grade)}  \\
-       &            &          (students \cross grades)) 
-\end{eqnarray*}
+% -------------------------------------------------------------------
+
+\section{Objetivos de Aprendizagem}
+\label{sec:objectives}
+
+A realiza\c{c}\~{a}o deste trabalho visa consolidar os seguintes objetivos:
+
+\begin{enumerate}
+  \item Compreender e dominar a sintaxe de programas Prolog.
+  \item Utilizar constru\c{c}\~{o}es b\'{a}sicas: \'{a}tomos, termos compostos, listas,
+        operadores e aritm\'{e}tica.
+  \item Compreender e controlar o \textit{backtracking}.
+  \item Saber utilizar predicados embutidos t\'{i}picos
+        (\texttt{findall/3}, \texttt{nth0/3}, \texttt{maplist/3}, etc.).
+  \item Implementar um jogo de duas pessoas com informa\c{c}\~{a}o perfeita.
+  \item Compreender o princ\'{i}pio \textit{minimax}.
+  \item Compreender o algoritmo \textit{alfa-beta}: uma implementa\c{c}\~{a}o
+        eficiente do \textit{minimax}.
+\end{enumerate}
+
+% -------------------------------------------------------------------
+
+\section{Introdu\c{c}\~{a}o ao Prolog}
+\label{sec:prolog_intro}
+
+Para compreender a implementa\c{c}\~{a}o, \'{e} essencial entender os fundamentos
+do Prolog~\cite{bratko2001prolog, sterling1994art}. Ao contr\'{a}rio de linguagens como Java ou Python, o Prolog n\~{a}o
+descreve \emph{como} calcular um resultado, mas sim \emph{o que \'{e} verdade}.
+O computador trata de descobrir como chegar l\'{a}.
+
+\subsection{Analogia: O Detetive e as Pistas}
+
+Imagine que o Prolog \'{e} um detetive. Voc\^{e} fornece-lhe um conjunto de
+\textbf{factos} (pistas conhecidas) e \textbf{regras} (dedu\c{c}\~{o}es l\'{o}gicas),
+e depois faz-lhe \textbf{perguntas} (consultas). O detetive procura
+sistematicamente todas as combina\c{c}\~{o}es poss\'{i}veis at\'{e} encontrar uma
+resposta.
+
+\begin{lstlisting}[language=Prolog,
+    caption={Factos e regras b\'{a}sicas em Prolog},
+    label={lst:prolog_basics},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+% Factos: quem gosta de que
+gosta(maria, gatos).
+gosta(joao, caes).
+gosta(maria, caes).
+
+% Regra: duas pessoas tem algo em comum
+em_comum(X, Y, Coisa) :-
+    gosta(X, Coisa),
+    gosta(Y, Coisa),
+    X \= Y.
+
+% Consulta: ?- em_comum(maria, joao, Coisa).
+% Resposta: Coisa = caes.
+\end{lstlisting}
+
+A linha que come\c{c}a com \texttt{:-} l\^{e}-se como ``se'': \texttt{em\_comum(X,\,Y,\,Coisa)}
+\'{e} verdade \textbf{se} \texttt{gosta(X,\,Coisa)} \'{e} verdade \textbf{e}
+\texttt{gosta(Y,\,Coisa)} \'{e} verdade \textbf{e} \texttt{X} n\~{a}o \'{e} igual a \texttt{Y}.
+
+\subsection{Termos e Unifica\c{c}\~{a}o}
+
+O elemento central do Prolog \'{e} o \textbf{termo}. Existem quatro tipos:
+
+\begin{itemize}
+  \item \textbf{\'{A}tomo} --- constante simb\'{o}lica: \texttt{gato}, \texttt{x},
+        \texttt{'.'}, \texttt{true}.
+  \item \textbf{N\'{u}mero} --- inteiro ou v\'{i}rgula flutuante: \texttt{3}, \texttt{4.5}.
+  \item \textbf{Vari\'{a}vel} --- come\c{c}a com mai\'{u}scula ou sublinhado:
+        \texttt{X}, \texttt{Jogador}, \texttt{\_}.
+  \item \textbf{Termo composto} --- funtor com argumentos:
+        \texttt{move(1/2,\,3/4)}, \texttt{[a,b,c]}.
+\end{itemize}
+
+\textbf{Unifica\c{c}\~{a}o} \'{e} o mecanismo pelo qual o Prolog associa valores a
+vari\'{a}veis. Quando se escreve \texttt{X~=~3}, o Prolog unifica \texttt{X} com
+\texttt{3}. A unifica\c{c}\~{a}o s\'{o} tem sucesso se os dois termos tiverem a mesma
+estrutura.
+
+\begin{lstlisting}[language=Prolog,
+    caption={Exemplos de unifica\c{c}\~{a}o},
+    label={lst:unification},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+?- X = 5.            % X = 5  (sucesso)
+?- 2/3 = R/C.        % R = 2, C = 3 (decomposicao de termos)
+?- [H|T] = [1,2,3].  % H = 1, T = [2,3] (cabeca e cauda)
+?- 2 = 3.            % false (nao unificam)
+\end{lstlisting}
+
+\subsection{Backtracking}
+\label{subsec:backtracking}
+
+O \textit{backtracking} \'{e} o mecanismo de busca do Prolog.
+Quando uma tentativa de satisfazer um objetivo falha, o Prolog
+\textbf{recua} automaticamente e tenta a pr\'{o}xima alternativa
+dispon\'{i}vel.
+
+\textbf{Analogia}: imagine um labirinto. O Prolog tenta um caminho;
+se chegar a um beco sem sa\'{i}da, volta atr\'{a}s (\textit{backtrack}) e
+tenta o pr\'{o}ximo corredor, at\'{e} explorar todos os caminhos.
+
+\begin{lstlisting}[language=Prolog,
+    caption={Demonstra\c{c}\~{a}o de backtracking},
+    label={lst:backtrack},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+cor(vermelho).
+cor(verde).
+cor(azul).
+
+% Consulta: ?- cor(X).
+% X = vermelho   (primeira solucao)
+% X = verde      (apos pedir mais: ";")
+% X = azul       (terceira solucao)
+% false          (sem mais solucoes)
+\end{lstlisting}
+
+O predicado \texttt{findall/3} aproveita o \textit{backtracking} para
+recolher \emph{todas} as solu\c{c}\~{o}es numa lista, o que \'{e} amplamente
+usado neste projeto:
+
+\begin{lstlisting}[language=Prolog,
+    caption={findall recolhe todas as solu\c{c}\~{o}es},
+    label={lst:findall_intro},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+?- findall(X, cor(X), Lista).
+% Lista = [vermelho, verde, azul]
+\end{lstlisting}
+
+\subsection{Listas em Prolog}
+
+Em Prolog, uma lista \'{e} representada como
+\texttt{[Elem1,\,Elem2,\,\ldots]}. A nota\c{c}\~{a}o \texttt{[H|T]} separa
+a cabe\c{c}a (\texttt{H}) da cauda (\texttt{T}).
+
+No jogo ISOLA, o tabuleiro \'{e} uma \textbf{lista de listas}: cada
+linha do tabuleiro \'{e} uma lista de \'{a}tomos.
+
+\begin{lstlisting}[language=Prolog,
+    caption={Tabuleiro 3{\texttimes}3 como lista de listas},
+    label={lst:board_list},
+    numbers=left,
+    basicstyle=\small\ttfamily,
+    frame=single]
+Tabuleiro = [
+  [x, '.', '.'],   % linha 0
+  ['.', '.', '.'], % linha 1
+  ['.', '.', o]    % linha 2
+]
+% Simbolos: '.' = livre, x = piao P1,
+%           o = piao P2, '#' = removida
+\end{lstlisting}
+
+% -------------------------------------------------------------------
+
+\section{Estrutura do Relat\'{o}rio}
+\label{sec:structure}
+
+O presente relat\'{o}rio est\'{a} organizado da seguinte forma:
+
+\begin{itemize}
+  \item \textbf{Cap\'{i}tulo~\ref{chap:impl} --- Implementa\c{c}\~{a}o:}
+        Descreve em detalhe todos os m\'{o}dulos do projeto: representa\c{c}\~{a}o
+        do tabuleiro, regras do jogo, algoritmos de intelig\^{e}ncia
+        artificial e interface de jogo.
+  \item \textbf{Cap\'{i}tulo~\ref{chap:eval} --- Avalia\c{c}\~{a}o Experimental:}
+        Apresenta os resultados dos testes unit\'{a}rios e os benchmarks de
+        desempenho obtidos em diferentes cen\'{a}rios.
+  \item \textbf{Ap\^{e}ndice~\ref{app:code} --- C\'{o}digo Fonte:}
+        Listagens selecionadas dos ficheiros Prolog desenvolvidos.
+\end{itemize}

@@ -1,0 +1,70 @@
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\setcounter {tocdepth}{-1}
+\contentsline {chapter}{Índice}{vii}{chapter*.5}%
+\setcounter {tocdepth}{3}
+\contentsline {chapter}{Lista de Figuras}{xi}{chapter*.6}%
+\contentsline {chapter}{Lista de Tabelas}{xiii}{chapter*.7}%
+\contentsline {chapter}{Lista de Listagens}{xv}{chapter*.8}%
+\babel@toc {portuguese}{}\relax 
+\contentsline {chapter}{\numberline {1}Introdu\c {c}\~{a}o}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}O Jogo ISOLA}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Regras do Jogo}{1}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Exemplo de Jogo}{1}{subsection.1.1.2}%
+\contentsline {section}{\numberline {1.2}Objetivos de Aprendizagem}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Introdu\c {c}\~{a}o ao Prolog}{2}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Analogia: O Detetive e as Pistas}{2}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Termos e Unifica\c {c}\~{a}o}{3}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Backtracking}{3}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Listas em Prolog}{4}{subsection.1.3.4}%
+\contentsline {section}{\numberline {1.4}Estrutura do Relat\'{o}rio}{4}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Implementa\c {c}\~{a}o}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Representa\c {c}\~{a}o do Tabuleiro (\texttt {board.pl})}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Estrutura de Dados}{5}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Predicados Principais}{6}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Regras do Jogo (\texttt {rules.pl})}{6}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Valida\c {c}\~{a}o de Movimentos}{6}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Aplica\c {c}\~{a}o de Movimentos e Remo\c {c}\~{a}o}{7}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Condi\c {c}\~{a}o de Fim de Jogo}{7}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Intelig\^{e}ncia Artificial (\texttt {ai.pl})}{8}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}O Princ\'{i}pio Minimax}{8}{subsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.1}Conceito e Analogia}{8}{subsubsection.2.3.1.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.2}Funcionamento}{8}{subsubsection.2.3.1.2}%
+\contentsline {subsubsection}{\numberline {2.3.1.3}Valores Terminais}{9}{subsubsection.2.3.1.3}%
+\contentsline {subsection}{\numberline {2.3.2}Algoritmo Alfa-Beta}{9}{subsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.2.1}Conceito e Analogia}{9}{subsubsection.2.3.2.1}%
+\contentsline {subsubsection}{\numberline {2.3.2.2}Os Par\^{a}metros $\alpha $ e $\beta $}{9}{subsubsection.2.3.2.2}%
+\contentsline {subsubsection}{\numberline {2.3.2.3}Implementa\c {c}\~{a}o}{10}{subsubsection.2.3.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.2.4}Ganho de Desempenho}{11}{subsubsection.2.3.2.4}%
+\contentsline {subsection}{\numberline {2.3.3}Ordena\c {c}\~{a}o de Movimentos}{11}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Fun\c {c}\~{a}o de Avalia\c {c}\~{a}o}{11}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}Interface de Jogo (\texttt {game.pl})}{12}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Fluxo do Programa}{12}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Turno Humano vs.\ Turno IA}{13}{subsection.2.4.2}%
+\contentsline {section}{\numberline {2.5}Utiliza\c {c}\~{a}o de Intelig\^{e}ncia Artificial no Desenvolvimento}{13}{section.2.5}%
+\contentsline {chapter}{\numberline {3}Avalia\c {c}\~{a}o Experimental}{15}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Testes Unit\'{a}rios}{15}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Execu\c {c}\~{a}o e Resultados}{15}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Cobertura dos Testes}{16}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Exemplo de Teste Unit\'{a}rio}{16}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Benchmarks de Desempenho}{17}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Metodologia}{17}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Resultados}{18}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}An\'{a}lise dos Resultados}{18}{subsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.3.1}Fator de Ramifica\c {c}\~{a}o Real}{18}{subsubsection.3.2.3.1}%
+\contentsline {subsubsection}{\numberline {3.2.3.2}Impacto da Profundidade}{18}{subsubsection.3.2.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.3.3}Consist\^{e}ncia dos Movimentos Escolhidos}{18}{subsubsection.3.2.3.3}%
+\contentsline {subsubsection}{\numberline {3.2.3.4}Avalia\c {c}\~{a}o da Fun\c {c}\~{a}o Heur\'{i}stica}{19}{subsubsection.3.2.3.4}%
+\contentsline {section}{\numberline {3.3}Limita\c {c}\~{o}es e Trabalho Futuro}{19}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Limita\c {c}\~{o}es Identificadas}{19}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Recomenda\c {c}\~{o}es de Configura\c {c}\~{a}o}{19}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Conclus\~{o}es}{20}{section.3.4}%
+\contentsline {chapter}{Referências}{21}{chapter*.18}%
+\contentsline {chapter}{\numberline {A}C\'{o}digo Fonte}{i}{appendix.A}%
+\contentsline {section}{\numberline {A.1}board.pl --- Tabuleiro}{i}{section.A.1}%
+\contentsline {section}{\numberline {A.2}rules.pl --- Regras do Jogo}{i}{section.A.2}%
+\contentsline {section}{\numberline {A.3}ai.pl --- Algoritmo Alfa-Beta}{ii}{section.A.3}%
