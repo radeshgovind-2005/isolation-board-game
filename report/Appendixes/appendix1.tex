@@ -1,20 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  appendix1.tex  --  Codigo Fonte (excertos principais)
-%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
-%  Inteligencia Artificial, ISEL 2025/2026
+%  appendix1.tex  --  Source Code (main excerpts)
+%  ISOLA Game in Prolog with Alpha-Beta Algorithm
+%  Artificial Intelligence, ISEL 2025/2026
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{C\'{o}digo Fonte}
+\chapter{Source Code}
 \label{app:code}
 
-Este ap\^{e}ndice apresenta os predicados centrais de cada m\'{o}dulo do
-projeto. O c\'{o}digo completo encontra-se no reposit\'{o}rio do projeto.
+This appendix presents the core predicates of each project module.
+The complete source code is available in the project repository.
 
 % -------------------------------------------------------------------
-\section{board.pl --- Tabuleiro}
+\section{board.pl --- Board}
 
 \begin{lstlisting}[language=Prolog,
-    caption={board.pl --- cria\c{c}\~{a}o e manipula\c{c}\~{a}o do tabuleiro},
+    caption={board.pl --- board creation and manipulation},
     label={lst:board_full},
     numbers=left,
     basicstyle=\footnotesize\ttfamily,
@@ -43,10 +43,10 @@ empty_cell('.').
 \end{lstlisting}
 
 % -------------------------------------------------------------------
-\section{rules.pl --- Regras do Jogo}
+\section{rules.pl --- Game Rules}
 
 \begin{lstlisting}[language=Prolog,
-    caption={rules.pl --- valida\c{c}\~{a}o e aplica\c{c}\~{a}o de movimentos},
+    caption={rules.pl --- move validation and application},
     label={lst:rules_full},
     numbers=left,
     basicstyle=\footnotesize\ttfamily,
@@ -81,10 +81,10 @@ game_over(Board, Player, P1Pos, P2Pos) :-
 \end{lstlisting}
 
 % -------------------------------------------------------------------
-\section{ai.pl --- Algoritmo Alfa-Beta}
+\section{ai.pl --- Alpha-Beta Algorithm}
 
 \begin{lstlisting}[language=Prolog,
-    caption={ai.pl --- ponto de entrada e pesquisa alfa-beta},
+    caption={ai.pl --- entry point and alpha-beta search},
     label={lst:ai_full},
     numbers=left,
     basicstyle=\footnotesize\ttfamily,

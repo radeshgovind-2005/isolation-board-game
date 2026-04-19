@@ -1,60 +1,60 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  chapter1.tex  --  Introducao
-%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
-%  Inteligencia Artificial, ISEL 2025/2026
+%  chapter1.tex  --  Introduction
+%  ISOLA Game in Prolog with Alpha-Beta Algorithm
+%  Artificial Intelligence, ISEL 2025/2026
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Introdu\c{c}\~{a}o}
+\chapter{Introduction}
 \label{chap:intro}
 
-\section{O Jogo ISOLA}
+\section{The ISOLA Game}
 \label{sec:game}
 
-\textit{ISOLA} (tamb\'{e}m conhecido como \textit{Isolation} ou \textit{Solitude}) \'{e} um jogo
-de estrat\'{e}gia para dois jogadores criado por Bernd Kienitz em 1972~\cite{kienitz1972isola}. O objetivo \'{e}
-simples: isolar o pe\~{a}o do advers\'{a}rio de modo a que ele n\~{a}o consiga realizar
-nenhum movimento v\'{a}lido no seu turno.
+\textit{ISOLA} (also known as \textit{Isolation} or \textit{Solitude}) is a
+two-player strategy game created by Bernd Kienitz in 1972~\cite{kienitz1972isola}. The objective is
+straightforward: isolate the opponent's pawn such that it cannot make any
+valid move on its turn.
 
-\subsection{Regras do Jogo}
+\subsection{Game Rules}
 \label{subsec:rules}
 
-O tabuleiro \'{e} uma grelha quadrada (normalmente 6{\texttimes}6). Cada jogador possui
-um pe\~{a}o que come\c{c}a em cantos opostos do tabuleiro:
+The board is a square grid (typically 6{\texttimes}6). Each player has a pawn that
+starts at opposite corners:
 
 \begin{itemize}
-  \item \textbf{Jogador~1} (\texttt{x}) come\c{c}a na posi\c{c}\~{a}o
-        (linha~0, coluna~0) --- canto superior esquerdo.
-  \item \textbf{Jogador~2} (\texttt{o}) come\c{c}a na posi\c{c}\~{a}o
-        (linha~5, coluna~5) --- canto inferior direito.
+  \item \textbf{Player~1} (\texttt{x}) starts at position
+        (row~0, column~0) --- top-left corner.
+  \item \textbf{Player~2} (\texttt{o}) starts at position
+        (row~5, column~5) --- bottom-right corner.
 \end{itemize}
 
-Em cada turno, um jogador executa obrigatoriamente \textbf{duas a\c{c}\~{o}es}:
+On each turn, a player must perform exactly \textbf{two actions}:
 
 \begin{enumerate}
-  \item \textbf{Mover} o seu pe\~{a}o para uma casa adjacente livre
-        (horizontal, vertical ou diagonalmente --- tal como um rei no
-        xadrez, mas apenas um passo de cada vez).
-  \item \textbf{Remover} qualquer casa vazia do tabuleiro (exceto as casas
-        ocupadas pelos pe\~{o}es), marcando-a como permanentemente
-        inacess\'{i}vel (\texttt{\#}).
+  \item \textbf{Move} their pawn to an adjacent free square
+        (horizontally, vertically, or diagonally --- like a king in
+        chess, but only one step at a time).
+  \item \textbf{Remove} any empty square from the board (except the
+        squares occupied by the pawns), marking it as permanently
+        inaccessible (\texttt{\#}).
 \end{enumerate}
 
-\textbf{N\~{a}o \'{e} permitido} saltar por cima do advers\'{a}rio nem entrar em
-casas j\'{a} removidas. Vence o jogador que fizer com que o advers\'{a}rio n\~{a}o
-tenha qualquer movimento v\'{a}lido no in\'{i}cio do seu turno.
+\textbf{It is not permitted} to jump over the opponent or to enter
+already-removed squares. The player who leaves the opponent with no
+valid move at the start of their turn wins.
 
-\subsection{Exemplo de Jogo}
+\subsection{Game Example}
 \label{subsec:example}
 
-O exemplo abaixo mostra a evolu\c{c}\~{a}o de um jogo numa grelha 6{\texttimes}6.
-No estado inicial, o Jogador~1 move-se de (0,0) para (1,1) e remove
-a casa (2,2).
+The example below illustrates the progression of a game on a 6{\texttimes}6 grid.
+In the initial state, Player~1 moves from (0,0) to (1,1) and removes
+square (2,2).
 
 \begin{figure}[htbp]
   \centering
   \begin{minipage}[t]{0.45\textwidth}
     \centering
-    \textbf{Estado inicial}
+    \textbf{Initial state}
     \begin{verbatim}
        0  1  2  3  4  5
     +------------------
@@ -69,7 +69,7 @@ a casa (2,2).
   \hfill
   \begin{minipage}[t]{0.45\textwidth}
     \centering
-    \textbf{Ap\'{o}s P1 mover (0,0)$\to$(1,1), remover (2,2)}
+    \textbf{After P1 moves (0,0)$\to$(1,1), removes (2,2)}
     \begin{verbatim}
        0  1  2  3  4  5
     +------------------
@@ -81,192 +81,190 @@ a casa (2,2).
  5  |  .  .  .  .  .  o
     \end{verbatim}
   \end{minipage}
-  \caption{Evolu\c{c}\~{a}o de um jogo ISOLA 6{\texttimes}6.
-           O s\'{i}mbolo \texttt{\#} representa uma casa
-           permanentemente removida.}
+  \caption{Progression of an ISOLA 6{\texttimes}6 game.
+           The symbol \texttt{\#} represents a permanently removed square.}
   \label{fig:game_example}
 \end{figure}
 
-A estrat\'{e}gia consiste em manter o pr\'{o}prio pe\~{a}o com muitas op\c{c}\~{o}es de
-movimento (\textbf{mobilidade}) enquanto se reduz progressivamente a
-mobilidade do advers\'{a}rio, acabando por o isolar completamente.
+The strategy consists of keeping one's own pawn with many movement options
+(\textbf{mobility}) while progressively reducing the opponent's mobility,
+ultimately isolating them completely.
 
 % -------------------------------------------------------------------
 
-\section{Objetivos de Aprendizagem}
+\section{Learning Objectives}
 \label{sec:objectives}
 
-A realiza\c{c}\~{a}o deste trabalho visa consolidar os seguintes objetivos:
+This work aims to consolidate the following learning objectives:
 
 \begin{enumerate}
-  \item Compreender e dominar a sintaxe de programas Prolog.
-  \item Utilizar constru\c{c}\~{o}es b\'{a}sicas: \'{a}tomos, termos compostos, listas,
-        operadores e aritm\'{e}tica.
-  \item Compreender e controlar o \textit{backtracking}.
-  \item Saber utilizar predicados embutidos t\'{i}picos
+  \item Understand and master the syntax of Prolog programs.
+  \item Use basic constructs: atoms, compound terms, lists,
+        operators, and arithmetic.
+  \item Understand and control \textit{backtracking}.
+  \item Be able to use typical built-in predicates
         (\texttt{findall/3}, \texttt{nth0/3}, \texttt{maplist/3}, etc.).
-  \item Implementar um jogo de duas pessoas com informa\c{c}\~{a}o perfeita.
-  \item Compreender o princ\'{i}pio \textit{minimax}.
-  \item Compreender o algoritmo \textit{alfa-beta}: uma implementa\c{c}\~{a}o
-        eficiente do \textit{minimax}.
+  \item Implement a two-player game with perfect information.
+  \item Understand the \textit{minimax} principle.
+  \item Understand the \textit{alpha-beta} algorithm: an efficient
+        implementation of \textit{minimax}.
 \end{enumerate}
 
 % -------------------------------------------------------------------
 
-\section{Introdu\c{c}\~{a}o ao Prolog}
+\section{Introduction to Prolog}
 \label{sec:prolog_intro}
 
-Para compreender a implementa\c{c}\~{a}o, \'{e} essencial entender os fundamentos
-do Prolog~\cite{bratko2001prolog, sterling1994art}. Ao contr\'{a}rio de linguagens como Java ou Python, o Prolog n\~{a}o
-descreve \emph{como} calcular um resultado, mas sim \emph{o que \'{e} verdade}.
-O computador trata de descobrir como chegar l\'{a}.
+To understand the implementation, it is essential to understand the
+fundamentals of Prolog~\cite{bratko2001prolog, sterling1994art}. Unlike languages such as Java or Python, Prolog does
+not describe \emph{how} to compute a result, but rather \emph{what is true}.
+The runtime system is responsible for determining how to derive the answer.
 
-\subsection{Analogia: O Detetive e as Pistas}
+\subsection{Analogy: The Detective and the Clues}
 
-Imagine que o Prolog \'{e} um detetive. Voc\^{e} fornece-lhe um conjunto de
-\textbf{factos} (pistas conhecidas) e \textbf{regras} (dedu\c{c}\~{o}es l\'{o}gicas),
-e depois faz-lhe \textbf{perguntas} (consultas). O detetive procura
-sistematicamente todas as combina\c{c}\~{o}es poss\'{i}veis at\'{e} encontrar uma
-resposta.
+Consider Prolog as a detective. One provides it with a set of
+\textbf{facts} (known clues) and \textbf{rules} (logical deductions),
+and then poses \textbf{queries} (questions). The detective systematically
+searches all possible combinations until an answer is found.
 
 \begin{lstlisting}[language=Prolog,
-    caption={Factos e regras b\'{a}sicas em Prolog},
+    caption={Basic facts and rules in Prolog},
     label={lst:prolog_basics},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-% Factos: quem gosta de que
-gosta(maria, gatos).
-gosta(joao, caes).
-gosta(maria, caes).
+% Facts: who likes what
+likes(mary, cats).
+likes(john, dogs).
+likes(mary, dogs).
 
-% Regra: duas pessoas tem algo em comum
-em_comum(X, Y, Coisa) :-
-    gosta(X, Coisa),
-    gosta(Y, Coisa),
+% Rule: two people have something in common
+in_common(X, Y, Thing) :-
+    likes(X, Thing),
+    likes(Y, Thing),
     X \= Y.
 
-% Consulta: ?- em_comum(maria, joao, Coisa).
-% Resposta: Coisa = caes.
+% Query: ?- in_common(mary, john, Thing).
+% Answer: Thing = dogs.
 \end{lstlisting}
 
-A linha que come\c{c}a com \texttt{:-} l\^{e}-se como ``se'': \texttt{em\_comum(X,\,Y,\,Coisa)}
-\'{e} verdade \textbf{se} \texttt{gosta(X,\,Coisa)} \'{e} verdade \textbf{e}
-\texttt{gosta(Y,\,Coisa)} \'{e} verdade \textbf{e} \texttt{X} n\~{a}o \'{e} igual a \texttt{Y}.
+The clause beginning with \texttt{:-} is read as ``if'': \texttt{in\_common(X,\,Y,\,Thing)}
+is true \textbf{if} \texttt{likes(X,\,Thing)} is true \textbf{and}
+\texttt{likes(Y,\,Thing)} is true \textbf{and} \texttt{X} is not equal to \texttt{Y}.
 
-\subsection{Termos e Unifica\c{c}\~{a}o}
+\subsection{Terms and Unification}
 
-O elemento central do Prolog \'{e} o \textbf{termo}. Existem quatro tipos:
+The central element of Prolog is the \textbf{term}. There are four types:
 
 \begin{itemize}
-  \item \textbf{\'{A}tomo} --- constante simb\'{o}lica: \texttt{gato}, \texttt{x},
+  \item \textbf{Atom} --- symbolic constant: \texttt{cat}, \texttt{x},
         \texttt{'.'}, \texttt{true}.
-  \item \textbf{N\'{u}mero} --- inteiro ou v\'{i}rgula flutuante: \texttt{3}, \texttt{4.5}.
-  \item \textbf{Vari\'{a}vel} --- come\c{c}a com mai\'{u}scula ou sublinhado:
-        \texttt{X}, \texttt{Jogador}, \texttt{\_}.
-  \item \textbf{Termo composto} --- funtor com argumentos:
+  \item \textbf{Number} --- integer or floating-point: \texttt{3}, \texttt{4.5}.
+  \item \textbf{Variable} --- begins with an uppercase letter or underscore:
+        \texttt{X}, \texttt{Player}, \texttt{\_}.
+  \item \textbf{Compound term} --- functor with arguments:
         \texttt{move(1/2,\,3/4)}, \texttt{[a,b,c]}.
 \end{itemize}
 
-\textbf{Unifica\c{c}\~{a}o} \'{e} o mecanismo pelo qual o Prolog associa valores a
-vari\'{a}veis. Quando se escreve \texttt{X~=~3}, o Prolog unifica \texttt{X} com
-\texttt{3}. A unifica\c{c}\~{a}o s\'{o} tem sucesso se os dois termos tiverem a mesma
-estrutura.
+\textbf{Unification} is the mechanism by which Prolog binds values to
+variables. When one writes \texttt{X~=~3}, Prolog unifies \texttt{X} with
+\texttt{3}. Unification succeeds only if the two terms share the same
+structure.
 
 \begin{lstlisting}[language=Prolog,
-    caption={Exemplos de unifica\c{c}\~{a}o},
+    caption={Unification examples},
     label={lst:unification},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-?- X = 5.            % X = 5  (sucesso)
-?- 2/3 = R/C.        % R = 2, C = 3 (decomposicao de termos)
-?- [H|T] = [1,2,3].  % H = 1, T = [2,3] (cabeca e cauda)
-?- 2 = 3.            % false (nao unificam)
+?- X = 5.            % X = 5  (succeeds)
+?- 2/3 = R/C.        % R = 2, C = 3 (term decomposition)
+?- [H|T] = [1,2,3].  % H = 1, T = [2,3] (head and tail)
+?- 2 = 3.            % false (unification fails)
 \end{lstlisting}
 
 \subsection{Backtracking}
 \label{subsec:backtracking}
 
-O \textit{backtracking} \'{e} o mecanismo de busca do Prolog.
-Quando uma tentativa de satisfazer um objetivo falha, o Prolog
-\textbf{recua} automaticamente e tenta a pr\'{o}xima alternativa
-dispon\'{i}vel.
+\textit{Backtracking} is Prolog's search mechanism.
+When an attempt to satisfy a goal fails, Prolog
+\textbf{backtracks} automatically and tries the next available
+alternative.
 
-\textbf{Analogia}: imagine um labirinto. O Prolog tenta um caminho;
-se chegar a um beco sem sa\'{i}da, volta atr\'{a}s (\textit{backtrack}) e
-tenta o pr\'{o}ximo corredor, at\'{e} explorar todos os caminhos.
+\textbf{Analogy}: imagine a maze. Prolog tries one path;
+if it reaches a dead end, it backtracks and tries the next
+corridor, until all paths have been explored.
 
 \begin{lstlisting}[language=Prolog,
-    caption={Demonstra\c{c}\~{a}o de backtracking},
+    caption={Backtracking demonstration},
     label={lst:backtrack},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-cor(vermelho).
-cor(verde).
-cor(azul).
+color(red).
+color(green).
+color(blue).
 
-% Consulta: ?- cor(X).
-% X = vermelho   (primeira solucao)
-% X = verde      (apos pedir mais: ";")
-% X = azul       (terceira solucao)
-% false          (sem mais solucoes)
+% Query: ?- color(X).
+% X = red    (first solution)
+% X = green  (after requesting more: ";")
+% X = blue   (third solution)
+% false      (no more solutions)
 \end{lstlisting}
 
-O predicado \texttt{findall/3} aproveita o \textit{backtracking} para
-recolher \emph{todas} as solu\c{c}\~{o}es numa lista, o que \'{e} amplamente
-usado neste projeto:
+The predicate \texttt{findall/3} exploits \textit{backtracking} to
+collect \emph{all} solutions into a list, which is used extensively
+throughout this project:
 
 \begin{lstlisting}[language=Prolog,
-    caption={findall recolhe todas as solu\c{c}\~{o}es},
+    caption={findall collects all solutions},
     label={lst:findall_intro},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-?- findall(X, cor(X), Lista).
-% Lista = [vermelho, verde, azul]
+?- findall(X, color(X), List).
+% List = [red, green, blue]
 \end{lstlisting}
 
-\subsection{Listas em Prolog}
+\subsection{Lists in Prolog}
 
-Em Prolog, uma lista \'{e} representada como
-\texttt{[Elem1,\,Elem2,\,\ldots]}. A nota\c{c}\~{a}o \texttt{[H|T]} separa
-a cabe\c{c}a (\texttt{H}) da cauda (\texttt{T}).
+In Prolog, a list is represented as
+\texttt{[Elem1,\,Elem2,\,\ldots]}. The notation \texttt{[H|T]} separates
+the head (\texttt{H}) from the tail (\texttt{T}).
 
-No jogo ISOLA, o tabuleiro \'{e} uma \textbf{lista de listas}: cada
-linha do tabuleiro \'{e} uma lista de \'{a}tomos.
+In the ISOLA game, the board is a \textbf{list of lists}: each
+row of the board is a list of atoms.
 
 \begin{lstlisting}[language=Prolog,
-    caption={Tabuleiro 3{\texttimes}3 como lista de listas},
+    caption={3{\texttimes}3 board as a list of lists},
     label={lst:board_list},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-Tabuleiro = [
-  [x, '.', '.'],   % linha 0
-  ['.', '.', '.'], % linha 1
-  ['.', '.', o]    % linha 2
+Board = [
+  [x, '.', '.'],   % row 0
+  ['.', '.', '.'], % row 1
+  ['.', '.', o]    % row 2
 ]
-% Simbolos: '.' = livre, x = piao P1,
-%           o = piao P2, '#' = removida
+% Symbols: '.' = free, x = P1 pawn,
+%          o = P2 pawn, '#' = removed
 \end{lstlisting}
 
 % -------------------------------------------------------------------
 
-\section{Estrutura do Relat\'{o}rio}
+\section{Report Structure}
 \label{sec:structure}
 
-O presente relat\'{o}rio est\'{a} organizado da seguinte forma:
+This report is organised as follows:
 
 \begin{itemize}
-  \item \textbf{Cap\'{i}tulo~\ref{chap:impl} --- Implementa\c{c}\~{a}o:}
-        Descreve em detalhe todos os m\'{o}dulos do projeto: representa\c{c}\~{a}o
-        do tabuleiro, regras do jogo, algoritmos de intelig\^{e}ncia
-        artificial e interface de jogo.
-  \item \textbf{Cap\'{i}tulo~\ref{chap:eval} --- Avalia\c{c}\~{a}o Experimental:}
-        Apresenta os resultados dos testes unit\'{a}rios e os benchmarks de
-        desempenho obtidos em diferentes cen\'{a}rios.
-  \item \textbf{Ap\^{e}ndice~\ref{app:code} --- C\'{o}digo Fonte:}
-        Listagens selecionadas dos ficheiros Prolog desenvolvidos.
+  \item \textbf{Chapter~\ref{chap:impl} --- Implementation:}
+        Describes in detail all project modules: board representation,
+        game rules, artificial intelligence algorithms, and the game
+        interface.
+  \item \textbf{Chapter~\ref{chap:eval} --- Experimental Evaluation:}
+        Presents the results of the unit tests and performance
+        benchmarks obtained under different configurations.
+  \item \textbf{Appendix~\ref{app:code} --- Source Code:}
+        Selected listings of the developed Prolog files.
 \end{itemize}

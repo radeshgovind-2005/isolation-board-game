@@ -1,15 +1,14 @@
 \babel@toc {english}{}\relax 
-\babel@toc {portuguese}{}\relax 
-\babel@toc {portuguese}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {portuguese}{}\relax 
-\babel@toc {portuguese}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Evolu\c {c}\~{a}o de um jogo ISOLA 6{\texttimes }6. O s\'{i}mbolo \texttt {\#} representa uma casa permanentemente removida.}}{2}{figure.caption.9}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Progression of an ISOLA 6{\texttimes }6 game. The symbol \texttt {\#} represents a permanently removed square.}}{2}{figure.caption.8}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Movimentos v\'{a}lidos a partir de posi\c {c}\~{o}es diferentes (X = destino v\'{a}lido, P = pe\~{a}o).}}{7}{figure.caption.11}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Exemplo de \'{a}rvore minimax com 2 n\'{i}veis. O Jogador MAX escolhe o ramo com valor m\'{a}ximo; o Jogador MIN escolhe o ramo com valor m\'{i}nimo. O valor na raiz \'{e} 3.}}{8}{figure.caption.12}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Corte alfa: o Jogador MAX j\'{a} tem garantido o valor~3 (ramo esquerdo). No ramo direito, o MIN encontrou 2, que \'{e} pior para MAX. Os restantes filhos do ramo direito s\~{a}o descartados.}}{10}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Valid moves from different positions (X = valid destination, P = pawn).}}{7}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Example of a minimax tree with 2 levels. The MAX player selects the branch with the maximum value; the MIN player selects the branch with the minimum value. The value at the root is 3.}}{8}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Alpha cutoff: the MAX player has already guaranteed the value~3 (left branch). In the right branch, the MIN node found 2, which is worse for MAX. The remaining children of the right branch are discarded.}}{10}{figure.caption.12}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

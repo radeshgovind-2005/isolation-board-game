@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.3)  11 APR 2026 17:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.3)  19 APR 2026 15:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1941,7 +1941,7 @@ LaTeX Warning: Unused global option(s):
 
 (./template.aux
 Package babel Info: 'portuguese' activates 'portuges' shorthands.
-(babel)             Reported on input line 20.
+(babel)             Reported on input line 22.
 )
 \openout1 = `template.aux'.
 
@@ -2192,148 +2192,127 @@ LaTeX Font Warning: Font shape `U/mathx/m/n' in size <5.5> not available
 {/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc} <./Logo/01_ISEL-Logotipo-RGB_Horizontal-Principal-900â”¬â•‘.png>] [2
 
 
-] (./Chapters/resumo.tex
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 14.
- (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ppl.fd
-File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
-)) (./Chapters/abstract.tex [3
+] (./Chapters/abstract.tex)
+No file Chapters/.
+[3
 
 ] [4
 
-]) [5] [6
-
 ] (./template.toc
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 26.
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 25.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [7]
-Package babel Info: 'portuguese' activates 'portuges' shorthands.
-(babel)             Reported on input line 70.
- [8])
+) [5] [6])
 \tf@toc=\write7
 \openout7 = `template.toc'.
 
- [9] [10
+ [7] [8
 
-] (./template.lof)
+] (./template.lof
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 8.
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ppl.fd
+File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
+))
 \tf@lof=\write8
 \openout8 = `template.lof'.
 
- [11
+ [9
 
-] [12
+] [10
 
 ] (./template.lot)
 \tf@lot=\write9
 \openout9 = `template.lot'.
 
- [13
+ [11
 
-] [14
+] [12
 
 ] (./template.lol)
 \tf@lol=\write10
 \openout10 = `template.lol'.
 
- [15
+ [13
 
-] [16
+] [14
 
 ]
 
 Package glossaries Warning: Empty glossary for \printnoidxglossary[type={acronym}]. Rerun may be required (or you may have forgotten to use commands like \gls) on input line 230.
 
-[17] [18
+[15] [16
 
 ]
 
 Package glossaries Warning: Empty glossary for \printnoidxglossary[type={main}]. Rerun may be required (or you may have forgotten to use commands like \gls) on input line 230.
 
-[19] [20
+[17] [18
 
 ]
 \@myi=\count597
  (./Chapters/chapter1.tex
-Cap\'{\i }tulo 1.
+Chapter 1.
 [1
 
 
 ]
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 137.
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 146.
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 135.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 145.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}] [3]
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 247.
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 245.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )) (./Chapters/chapter2.tex [4]
-Cap\'{\i }tulo 2.
+Chapter 2.
+
+Overfull \hbox (1.43196pt too wide) in paragraph at lines 56--60
+[]\T1/ppl/b/n/10 Advantage of this rep-re-sen-ta-tion: \T1/ppl/m/n/10 lists are Pro-log's na-tive data struc-ture, and pred-i-cates such as \T1/pcr/m/n/10 nth0/3
+ []
+
+
+Overfull \hbox (4.79132pt too wide) in paragraph at lines 56--60
+\T1/ppl/m/n/10 (index-based ac-cess) and \T1/pcr/m/n/10 maplist/2 \T1/ppl/m/n/10 (func-tional ap-pli-ca-tion) are avail-able in the stan-dard li-brary, greatly
+ []
+
 [5
 
-]
-Overfull \hbox (6.60284pt too wide) in paragraph at lines 81--85
-[]\T1/ppl/b/n/10 Como fun-ci-ona: \T1/pcr/m/n/10 length(Board, Size) \T1/ppl/m/n/10 cria uma lista de \T1/pcr/m/n/10 Size \T1/ppl/m/n/10 va-ri-á-veis não ins-tan-ci-a-das. O \T1/pcr/m/n/10 maplist
- []
-
-[6] [7] [8]
+] [6] [7] [8]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 323.
+(hyperref)                removing `math shift' on input line 322.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\alpha' on input line 323.
+(hyperref)                removing `\alpha' on input line 322.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 323.
+(hyperref)                removing `math shift' on input line 322.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 323.
+(hyperref)                removing `math shift' on input line 322.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\beta' on input line 323.
+(hyperref)                removing `\beta' on input line 322.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 323.
+(hyperref)                removing `math shift' on input line 322.
 
-[9]
-Underfull \vbox (badness 1210) has occurred while \output is active []
-
- [10] [11] [12]
-Overfull \hbox (4.92267pt too wide) in paragraph at lines 552--555
-\T1/ppl/m/n/10 Quando o turno per-tence a um jo-ga-dor hu-mano, o pro-grama pede a en-trada no for-mato \T1/pcr/m/n/10 Linha/Coluna.
- []
-
-[13]) (./Chapters/chapter3.tex [14]
-Cap\'{\i }tulo 3.
+[9] [10] [11] [12] [13]) (./Chapters/chapter3.tex [14]
+Chapter 3.
 [15
 
 ]
-Underfull \hbox (badness 1931) in paragraph at lines 95--99
-[]|\T1/ppl/m/n/10 Criação do ta-bu-leiro; acesso por co-or-de-
+Underfull \hbox (badness 4072) in paragraph at lines 95--99
+\T1/ppl/m/n/10 destructive up-date; out-of-bounds ac-cess
  []
 
-
-Underfull \hbox (badness 1478) in paragraph at lines 95--99
-\T1/ppl/m/n/10 na-das; atu-a-li-za-ção não des-tru-tiva; acesso
- []
-
-
-Underfull \hbox (badness 3148) in paragraph at lines 95--99
-\T1/ppl/m/n/10 fora dos li-mi-tes (deve fa-lhar sem erro);
- []
-
-[16] [17] [18]
-Overfull \hbox (8.04285pt too wide) in paragraph at lines 271--276
-[]\T1/ppl/b/n/10 Formato de en-trada: \T1/ppl/m/n/10 os jo-ga-do-res hu-ma-nos têm de in-tro-du-zir po-si-ções no for-mato \T1/pcr/m/n/10 Linha/Coluna.
- []
-
-[19]) [20] [21
+[16] [17] [18] [19]) [20] [21
 
 
 ] [22
@@ -2341,7 +2320,7 @@ Overfull \hbox (8.04285pt too wide) in paragraph at lines 271--276
 ]
 \@myi=\count598
  (./Appendixes/appendix1.tex
-Ap\^endice A.
+Appendix A.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.i}) has been already used, duplicate ignored
 <to be read again> 
@@ -2377,24 +2356,24 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
 Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: 49A7517DA322FBF922623FE77686C924;10552.
+(rerunfilecheck)             Checksum: 430306D8DA7D49CEFC7CF13EE11E6724;9638.
 Package logreq Info: Writing requests to 'template.run.xml'.
 \openout1 = `template.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 51123 strings out of 467525
- 987379 string characters out of 5418983
- 2384797 words of memory out of 5000000
- 78719 multiletter control sequences out of 15000+600000
+ 51098 strings out of 467525
+ 986985 string characters out of 5418983
+ 2384281 words of memory out of 5000000
+ 78700 multiletter control sequences out of 15000+600000
  735024 words of font info for 229 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 99i,13n,108p,2555b,2454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,108p,2555b,2450s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathabx-type1/matha10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/mathabx-type1/matha7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on template.pdf (46 pages, 619859 bytes).
+Output written on template.pdf (44 pages, 617544 bytes).
 PDF statistics:
- 1056 PDF objects out of 1200 (max. 8388607)
- 966 compressed objects within 10 object streams
- 433 named destinations out of 1000 (max. 500000)
+ 1046 PDF objects out of 1200 (max. 8388607)
+ 958 compressed objects within 10 object streams
+ 430 named destinations out of 1000 (max. 500000)
  506 words of extra memory for PDF output out of 10000 (max. 10000000)
 

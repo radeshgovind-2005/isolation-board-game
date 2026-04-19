@@ -1,124 +1,124 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  chapter2.tex  --  Implementacao
-%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
-%  Inteligencia Artificial, ISEL 2025/2026
+%  chapter2.tex  --  Implementation
+%  ISOLA Game in Prolog with Alpha-Beta Algorithm
+%  Artificial Intelligence, ISEL 2025/2026
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Implementa\c{c}\~{a}o}
+\chapter{Implementation}
 \label{chap:impl}
 
-Este cap\'{i}tulo descreve a implementa\c{c}\~{a}o do jogo ISOLA em SWI-Prolog.
-O projeto est\'{a} organizado em cinco m\'{o}dulos:
+This chapter describes the implementation of the ISOLA game in SWI-Prolog.
+The project is organised into five modules:
 
 \begin{table}[htbp]
-  \caption{Estrutura de m\'{o}dulos do projeto}
+  \caption{Project module structure}
   \label{tab:modules}
   \centering
   \begin{tabular}{lll}
     \toprule
-    \textbf{Ficheiro} & \textbf{Responsabilidade} & \textbf{Predicados principais} \\
+    \textbf{File} & \textbf{Responsibility} & \textbf{Main predicates} \\
     \midrule
-    \texttt{board.pl}  & Representa\c{c}\~{a}o e display do tabuleiro
+    \texttt{board.pl}  & Board representation and display
                        & \texttt{initial\_board}, \texttt{get\_cell}, \texttt{set\_cell} \\
-    \texttt{rules.pl}  & Regras e valida\c{c}\~{a}o de movimentos
+    \texttt{rules.pl}  & Game rules and move validation
                        & \texttt{valid\_move}, \texttt{apply\_move}, \texttt{game\_over} \\
-    \texttt{ai.pl}     & Intelig\^{e}ncia artificial (alfa-beta)
+    \texttt{ai.pl}     & Artificial intelligence (alpha-beta)
                        & \texttt{best\_move}, \texttt{alphabeta}, \texttt{evaluate} \\
-    \texttt{game.pl}   & Interface e ciclo de jogo
+    \texttt{game.pl}   & Interface and game loop
                        & \texttt{play}, \texttt{game\_loop}, \texttt{human\_turn} \\
-    \texttt{main.pl}   & Ponto de entrada
+    \texttt{main.pl}   & Entry point
                        & \texttt{initialization} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 % ===================================================================
-\section{Representa\c{c}\~{a}o do Tabuleiro (\texttt{board.pl})}
+\section{Board Representation (\texttt{board.pl})}
 \label{sec:board}
 
-\subsection{Estrutura de Dados}
+\subsection{Data Structure}
 
-O tabuleiro \'{e} representado como uma \textbf{lista de listas} em Prolog.
-Cada elemento da lista exterior \'{e} uma linha do tabuleiro; cada elemento
-de uma linha \'{e} um \'{a}tomo que indica o conte\'{u}do da casa:
+The board is represented as a \textbf{list of lists} in Prolog.
+Each element of the outer list is a row of the board; each element
+of a row is an atom indicating the contents of the square:
 
 \begin{itemize}
-  \item \texttt{'.'} --- casa livre (vazia)
-  \item \texttt{x}   --- pe\~{a}o do Jogador~1
-  \item \texttt{o}   --- pe\~{a}o do Jogador~2
-  \item \texttt{'\#'} --- casa permanentemente removida
+  \item \texttt{'.'} --- free (empty) square
+  \item \texttt{x}   --- Player~1's pawn
+  \item \texttt{o}   --- Player~2's pawn
+  \item \texttt{'\#'} --- permanently removed square
 \end{itemize}
 
-As posi\c{c}\~{o}es s\~{a}o representadas como o termo composto \texttt{Linha/Coluna}
-(indexa\c{c}\~{a}o a partir de zero). Por exemplo, \texttt{2/3} significa linha~2,
-coluna~3.
+Positions are represented as the compound term \texttt{Row/Column}
+(zero-based indexing). For example, \texttt{2/3} denotes row~2,
+column~3.
 
-\textbf{Vantagem desta representa\c{c}\~{a}o:} as listas s\~{a}o a estrutura
-nativa do Prolog, e predicados como \texttt{nth0/3} (acesso por \'{i}ndice) e
-\texttt{maplist/2} (aplica\c{c}\~{a}o funcional) est\~{a}o dispon\'{i}veis na
-biblioteca padr\~{a}o, o que simplifica enormemente o c\'{o}digo.
+\textbf{Advantage of this representation:} lists are Prolog's native
+data structure, and predicates such as \texttt{nth0/3} (index-based access) and
+\texttt{maplist/2} (functional application) are available in the
+standard library, greatly simplifying the code.
 
-\subsection{Predicados Principais}
+\subsection{Main Predicates}
 
-O predicado \texttt{initial\_board/2} cria um tabuleiro de tamanho
-$N{\times}N$ totalmente preenchido com casas livres:
+The predicate \texttt{initial\_board/2} creates a board of size
+$N{\times}N$ entirely filled with free squares:
 
 \begin{lstlisting}[language=Prolog,
-    caption={Cria\c{c}\~{a}o do tabuleiro inicial},
+    caption={Initial board creation},
     label={lst:initial_board},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
 initial_board(Size, Board) :-
-    length(Board, Size),        % Board tem Size linhas
-    maplist(make_row(Size), Board). % cada linha tem Size colunas
+    length(Board, Size),        % Board has Size rows
+    maplist(make_row(Size), Board). % each row has Size columns
 
 make_row(Size, Row) :-
     length(Row, Size),
-    maplist(=('.'), Row).       % cada celula e '.'
+    maplist(=('.'), Row).       % each cell is '.'
 \end{lstlisting}
 
-\textbf{Como funciona:} \texttt{length(Board,~Size)} cria uma lista de
-\texttt{Size} vari\'{a}veis n\~{a}o instanciadas. O \texttt{maplist} aplica
-\texttt{make\_row} a cada elemento, e dentro de cada linha, \texttt{maplist(=('.'),~Row)}
-unifica cada c\'{e}lula com o \'{a}tomo \texttt{'.'}.
+\textbf{How it works:} \texttt{length(Board,~Size)} creates a list of
+\texttt{Size} uninstantiated variables. \texttt{maplist} applies
+\texttt{make\_row} to each element, and within each row, \texttt{maplist(=('.'),~Row)}
+unifies each cell with the atom \texttt{'.'}.
 
-A atualiza\c{c}\~{a}o de uma c\'{e}lula \'{e} \textbf{n\~{a}o destrutiva}: o Prolog n\~{a}o
-modifica estruturas existentes, mas constr\'{o}i uma nova vers\~{a}o do tabuleiro.
-Esta \'{e} uma caracter\'{i}stica fundamental da programa\c{c}\~{a}o l\'{o}gica.
+Cell updates are \textbf{non-destructive}: Prolog does not modify
+existing structures, but constructs a new version of the board.
+This is a fundamental characteristic of logic programming.
 
 \begin{lstlisting}[language=Prolog,
-    caption={Atualiza\c{c}\~{a}o n\~{a}o destrutiva de uma c\'{e}lula},
+    caption={Non-destructive cell update},
     label={lst:set_cell},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
 set_cell(Board, Row, Col, Value, NewBoard) :-
-    nth0(Row, Board, OldRow, RestRows),   % separa a linha Row
-    nth0(Col, OldRow, _, RestCols),       % separa o elemento Col
-    nth0(Col, NewRow, Value, RestCols),   % reconstroi linha com novo valor
-    nth0(Row, NewBoard, NewRow, RestRows).% reconstroi tabuleiro
+    nth0(Row, Board, OldRow, RestRows),   % extract row Row
+    nth0(Col, OldRow, _, RestCols),       % extract element Col
+    nth0(Col, NewRow, Value, RestCols),   % rebuild row with new value
+    nth0(Row, NewBoard, NewRow, RestRows).% rebuild board
 \end{lstlisting}
 
-\textbf{Analogia:} pense num fotograma de cinema. Quando um personagem
-se move, n\~{a}o se apaga o fotograma anterior --- cria-se um novo fotograma
-com o personagem na nova posi\c{c}\~{a}o. O Prolog funciona da mesma forma.
+\textbf{Analogy:} consider a film frame. When a character moves,
+the previous frame is not erased --- a new frame is created with
+the character in the new position. Prolog operates in the same way.
 
 % ===================================================================
-\section{Regras do Jogo (\texttt{rules.pl})}
+\section{Game Rules (\texttt{rules.pl})}
 \label{sec:rules}
 
-\subsection{Valida\c{c}\~{a}o de Movimentos}
+\subsection{Move Validation}
 
-Um movimento \'{e} v\'{a}lido se a casa de destino:
+A move is valid if the destination square:
 \begin{enumerate}
-  \item estiver a exatamente um passo (em qualquer das 8 dire\c{c}\~{o}es);
-  \item estiver dentro dos limites do tabuleiro;
-  \item estiver livre (\texttt{'.'}).
+  \item is exactly one step away (in any of the 8 directions);
+  \item is within the board boundaries;
+  \item is free (\texttt{'.'}).
 \end{enumerate}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Valida\c{c}\~{a}o de um movimento},
+    caption={Move validation},
     label={lst:valid_move},
     numbers=left,
     basicstyle=\small\ttfamily,
@@ -126,27 +126,27 @@ Um movimento \'{e} v\'{a}lido se a casa de destino:
 valid_move(Board, FromR, FromC, ToR, ToC) :-
     board_size(Board, Size),
     Max is Size - 1,
-    member(DR, [-1, 0, 1]),     % delta de linha: -1, 0 ou +1
-    member(DC, [-1, 0, 1]),     % delta de coluna: -1, 0 ou +1
-    \+ (DR =:= 0, DC =:= 0),   % nao pode ficar no lugar
+    member(DR, [-1, 0, 1]),     % row delta: -1, 0 or +1
+    member(DC, [-1, 0, 1]),     % column delta: -1, 0 or +1
+    \+ (DR =:= 0, DC =:= 0),   % cannot stay in place
     ToR is FromR + DR,
     ToC is FromC + DC,
-    ToR >= 0, ToR =< Max,       % dentro dos limites
+    ToR >= 0, ToR =< Max,       % within boundaries
     ToC >= 0, ToC =< Max,
-    get_cell(Board, ToR, ToC, '.'). % casa livre
+    get_cell(Board, ToR, ToC, '.'). % free square
 \end{lstlisting}
 
-Este predicado funciona tanto como \textbf{verificador} (quando
-\texttt{ToR/ToC} j\'{a} est\~{a}o instanciados) como \textbf{gerador} (quando
-est\~{a}o livres, o Prolog gera por \textit{backtracking} todas as combina\c{c}\~{o}es
-de \texttt{DR/DC}). Esta dualidade \'{e} uma das caracter\'{i}sticas mais elegantes
-do Prolog.
+This predicate functions both as a \textbf{verifier} (when
+\texttt{ToR/ToC} are already instantiated) and as a \textbf{generator} (when
+they are unbound, Prolog generates all combinations of
+\texttt{DR/DC} through \textit{backtracking}). This duality is one of the
+most elegant features of Prolog.
 
 \begin{figure}[htbp]
   \centering
   \begin{minipage}[t]{0.45\textwidth}
     \centering
-    \textbf{Pe\~{a}o no centro: 8 movimentos}
+    \textbf{Pawn at centre: 8 moves}
     \begin{verbatim}
   X X X
   X P X
@@ -156,44 +156,43 @@ do Prolog.
   \hfill
   \begin{minipage}[t]{0.45\textwidth}
     \centering
-    \textbf{Pe\~{a}o no canto: 3 movimentos}
+    \textbf{Pawn at corner: 3 moves}
     \begin{verbatim}
   P X .
   X X .
   . . .
     \end{verbatim}
   \end{minipage}
-  \caption{Movimentos v\'{a}lidos a partir de posi\c{c}\~{o}es diferentes
-           (X = destino v\'{a}lido, P = pe\~{a}o).}
+  \caption{Valid moves from different positions
+           (X = valid destination, P = pawn).}
   \label{fig:valid_moves}
 \end{figure}
 
-\subsection{Aplica\c{c}\~{a}o de Movimentos e Remo\c{c}\~{a}o}
+\subsection{Move Application and Square Removal}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Aplica um movimento e remove uma casa},
+    caption={Apply a move and remove a square},
     label={lst:apply_move},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-% Move o peao de From para To
+% Move the pawn from From to To
 apply_move(Board, FromR, FromC, ToR, ToC, NewBoard) :-
-    get_cell(Board, FromR, FromC, Piece),  % le o simbolo
-    set_cell(Board, FromR, FromC, '.', B1),% limpa origem
-    set_cell(B1, ToR, ToC, Piece, NewBoard).% coloca no destino
+    get_cell(Board, FromR, FromC, Piece),  % read the symbol
+    set_cell(Board, FromR, FromC, '.', B1),% clear origin
+    set_cell(B1, ToR, ToC, Piece, NewBoard).% place at destination
 
-% Marca uma casa como permanentemente removida
+% Mark a square as permanently removed
 apply_remove(Board, Row, Col, NewBoard) :-
     set_cell(Board, Row, Col, '#', NewBoard).
 \end{lstlisting}
 
-\subsection{Condi\c{c}\~{a}o de Fim de Jogo}
+\subsection{End-Game Condition}
 
-O jogo termina quando o jogador cujo turno \'{e} jogar n\~{a}o tem nenhum
-movimento v\'{a}lido:
+The game ends when the player whose turn it is has no valid move:
 
 \begin{lstlisting}[language=Prolog,
-    caption={Detec\c{c}\~{a}o de fim de jogo},
+    caption={End-game detection},
     label={lst:game_over},
     numbers=left,
     basicstyle=\small\ttfamily,
@@ -201,42 +200,41 @@ movimento v\'{a}lido:
 game_over(Board, Player, P1Pos, P2Pos) :-
     player_pos(Player, P1Pos, P2Pos, CR/CC),
     \+ valid_move(Board, CR, CC, _, _).
-    % \+ significa negacao: true se valid_move FALHA
+    % \+ means negation: true if valid_move FAILS
 \end{lstlisting}
 
-O operador \texttt{\textbackslash+} \'{e} a \textbf{nega\c{c}\~{a}o por falha} do Prolog:
-``\texttt{\textbackslash+~Goal}'' \'{e} verdade se e s\'{o} se \texttt{Goal} falha.
-Aqui, \texttt{game\_over} \'{e} verdade se n\~{a}o existe nenhum movimento v\'{a}lido.
+The operator \texttt{\textbackslash+} is Prolog's \textbf{negation as failure}:
+``\texttt{\textbackslash+~Goal}'' is true if and only if \texttt{Goal} fails.
+Here, \texttt{game\_over} is true when no valid move exists.
 
 % ===================================================================
-\section{Intelig\^{e}ncia Artificial (\texttt{ai.pl})}
+\section{Artificial Intelligence (\texttt{ai.pl})}
 \label{sec:ai}
 
-\subsection{O Princ\'{i}pio Minimax}
+\subsection{The Minimax Principle}
 \label{subsec:minimax}
 
-\subsubsection{Conceito e Analogia}
+\subsubsection{Concept and Analogy}
 
-O \textit{minimax} \'{e} o algoritmo cl\'{a}ssico para jogos de dois jogadores com
-informa\c{c}\~{a}o perfeita~\cite{russell2020artificial}.
+\textit{Minimax} is the classical algorithm for two-player games with
+perfect information~\cite{russell2020artificial}.
 
-\textbf{Analogia:} imagine que voc\^{e} est\'{a} a jogar xadrez e quer decidir o
-melhor movimento. Pensa: ``Se eu jogar aqui, o meu advers\'{a}rio vai
-responder com o seu melhor movimento, e depois eu vou responder com o
-meu melhor, e assim por diante.'' O \textit{minimax} formaliza exatamente
-este racioc\'{i}nio.
+\textbf{Analogy:} consider playing chess and deciding the best move.
+One reasons: ``If I play here, my opponent will respond with their best
+move, then I will respond with mine, and so on.'' The \textit{minimax}
+algorithm formalises exactly this reasoning.
 
-\subsubsection{Funcionamento}
+\subsubsection{Operation}
 
-O algoritmo constr\'{o}i mentalmente uma \textbf{\'{a}rvore de jogo}:
+The algorithm mentally constructs a \textbf{game tree}:
 
 \begin{itemize}
-  \item \textbf{N\'{o}s MAX} (Jogador~1, s\'{i}mbolo \texttt{x}): escolhe o
-        movimento que \textbf{maximiza} a pontua\c{c}\~{a}o.
-  \item \textbf{N\'{o}s MIN} (Jogador~2, s\'{i}mbolo \texttt{o}): escolhe o
-        movimento que \textbf{minimiza} a pontua\c{c}\~{a}o (prejudica o Jogador~1).
-  \item \textbf{N\'{o}s folha} (profundidade~0 ou jogo terminado): a
-        posi\c{c}\~{a}o \'{e} avaliada por uma fun\c{c}\~{a}o heur\'{i}stica.
+  \item \textbf{MAX nodes} (Player~1, symbol \texttt{x}): chooses the
+        move that \textbf{maximises} the score.
+  \item \textbf{MIN nodes} (Player~2, symbol \texttt{o}): chooses the
+        move that \textbf{minimises} the score (disadvantaging Player~1).
+  \item \textbf{Leaf nodes} (depth~0 or game over): the position is
+        evaluated by a heuristic function.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -248,30 +246,30 @@ O algoritmo constr\'{o}i mentalmente uma \textbf{\'{a}rvore de jogo}:
         /      \       /      \
       [3]    [12]   [8]    [2]
   \end{verbatim}
-  \caption{Exemplo de \'{a}rvore minimax com 2 n\'{i}veis.
-           O Jogador MAX escolhe o ramo com valor m\'{a}ximo;
-           o Jogador MIN escolhe o ramo com valor m\'{i}nimo.
-           O valor na raiz \'{e} 3.}
+  \caption{Example of a minimax tree with 2 levels.
+           The MAX player selects the branch with the maximum value;
+           the MIN player selects the branch with the minimum value.
+           The value at the root is 3.}
   \label{fig:minimax_tree}
 \end{figure}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Implementa\c{c}\~{a}o do minimax puro},
+    caption={Pure minimax implementation},
     label={lst:minimax},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-% Caso base 1: profundidade esgotada -> avaliacao estatica
+% Base case 1: depth exhausted -> static evaluation
 minimax(Board, _Player, P1Pos, P2Pos, 0, Value) :-
     !, evaluate(Board, P1Pos, P2Pos, Value).
 
-% Caso base 2: jogador sem movimentos -> derrota terminal
+% Base case 2: player has no moves -> terminal loss
 minimax(Board, Player, P1Pos, P2Pos, _D, Value) :-
     player_pos(Player, P1Pos, P2Pos, CR/CC),
     \+ valid_move(Board, CR, CC, _, _), !,
     terminal_value(Player, Value).
 
-% Caso recursivo: gera filhos e aplica max/min
+% Recursive case: generate children and apply max/min
 minimax(Board, Player, P1Pos, P2Pos, Depth, Value) :-
     all_move_pairs(Board, Player, P1Pos, P2Pos, Pairs),
     NextD is Depth - 1,
@@ -280,57 +278,58 @@ minimax(Board, Player, P1Pos, P2Pos, Depth, Value) :-
                           P1Pos, P2Pos, NextD),
             Pairs, ChildValues),
     ( Player =:= 1
-    -> max_list(ChildValues, Value)  % MAX escolhe o maior
-    ;  min_list(ChildValues, Value)  % MIN escolhe o menor
+    -> max_list(ChildValues, Value)  % MAX selects the highest
+    ;  min_list(ChildValues, Value)  % MIN selects the lowest
     ).
 \end{lstlisting}
 
-\subsubsection{Valores Terminais}
+\subsubsection{Terminal Values}
 
-Quando um jogador fica sem movimentos, o jogo termina:
+When a player runs out of moves, the game terminates:
 
 \begin{lstlisting}[language=Prolog,
-    caption={Valores terminais},
+    caption={Terminal values},
     label={lst:terminal},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
-terminal_value(1, -1000). % Jogador 1 preso -> derrota (negativo)
-terminal_value(2,  1000). % Jogador 2 preso -> vitoria de P1 (positivo)
+terminal_value(1, -1000). % Player 1 trapped -> loss (negative)
+terminal_value(2,  1000). % Player 2 trapped -> P1 wins (positive)
 \end{lstlisting}
 
-Os valores $\pm1000$ s\~{a}o intencionalmente muito maiores do que qualquer
-valor de avalia\c{c}\~{a}o heur\'{i}stica, garantindo que uma vit\'{o}ria ou derrota
-real \'{e} sempre preferida a um estado com boa heur\'{i}stica.
+The values $\pm1000$ are intentionally much larger than any
+heuristic evaluation value, ensuring that an actual win or loss
+is always preferred over a state with a favourable heuristic.
 
 % -------------------------------------------------------------------
-\subsection{Algoritmo Alfa-Beta}
+\subsection{The Alpha-Beta Algorithm}
 \label{subsec:alphabeta}
 
-\subsubsection{Conceito e Analogia}
+\subsubsection{Concept and Analogy}
 
-O \textit{minimax} \'{e} correto mas lento: explora todos os n\'{o}s da \'{a}rvore.
-O \textit{alfa-beta} \'{e} uma otimiza\c{c}\~{a}o que descarta ramos que \textbf{nunca
-podem influenciar o resultado}, sem alterar o valor final calculado.
+\textit{Minimax} is correct but slow: it explores every node in the tree.
+\textit{Alpha-beta} is an optimisation that discards branches that
+\textbf{can never influence the final result}, without altering the
+computed value.
 
-\textbf{Analogia:} imagine que est\'{a} a selecionar o melhor restaurante numa
-lista. J\'{a} visitou um restaurante com classifica\c{c}\~{a}o 8/10. Ao visitar o
-segundo restaurante, descobre que tem um prato horrível de 3/10. Sem sequer
-provar o resto da ementa, sabe que este restaurante nunca ser\'{a} a sua
-primeira escolha. \textbf{Pode ignorar o resto da visita} e passar ao
-pr\'{o}ximo. O alfa-beta faz exatamente o mesmo com ramos da \'{a}rvore de jogo.
+\textbf{Analogy:} imagine selecting the best restaurant from a list.
+One has already visited a restaurant rated 8/10. Upon visiting the
+second restaurant, a dish rated 3/10 is encountered. Without examining
+the rest of the menu, one can conclude that this restaurant will never be
+the best option. \textbf{The remainder of the visit can be skipped.}
+Alpha-beta applies exactly this reasoning to branches of the game tree.
 
-\subsubsection{Os Par\^{a}metros $\alpha$ e $\beta$}
+\subsubsection{The Parameters $\alpha$ and $\beta$}
 
 \begin{itemize}
-  \item $\alpha$ (\textit{alpha}) --- o melhor valor que o Jogador MAX j\'{a}
-        garantiu. Come\c{c}a em $-\infty$.
-  \item $\beta$ (\textit{beta}) --- o melhor valor que o Jogador MIN j\'{a}
-        garantiu. Come\c{c}a em $+\infty$.
-  \item \textbf{Corte beta} (em n\'{o} MAX): se o valor atual $\geq \beta$,
-        o Jogador MIN nunca escolheria este ramo. Pode parar.
-  \item \textbf{Corte alfa} (em n\'{o} MIN): se o valor atual $\leq \alpha$,
-        o Jogador MAX nunca escolheria este ramo. Pode parar.
+  \item $\alpha$ (\textit{alpha}) --- the best value the MAX player
+        has already guaranteed. Initialised to $-\infty$.
+  \item $\beta$ (\textit{beta}) --- the best value the MIN player
+        has already guaranteed. Initialised to $+\infty$.
+  \item \textbf{Beta cutoff} (at a MAX node): if the current value $\geq \beta$,
+        the MIN player would never choose this branch. Search can stop.
+  \item \textbf{Alpha cutoff} (at a MIN node): if the current value $\leq \alpha$,
+        the MAX player would never choose this branch. Search can stop.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -340,24 +339,24 @@ pr\'{o}ximo. O alfa-beta faz exatamente o mesmo com ramos da \'{a}rvore de jogo.
                /        \
           MIN [3]       MIN [?]
          /      \       /      \
-       [3]    [12]   [2]   CORTADO
+       [3]    [12]   [2]   PRUNED
                      ^
-          Alpha = 3, este MIN ja tem 2.
-          Como 2 < 3 (alpha), MAX nunca
-          escolheria este caminho.
-          Os filhos restantes sao cortados.
+          Alpha = 3, this MIN node already has 2.
+          Since 2 < 3 (alpha), MAX would never
+          choose this path.
+          The remaining children are pruned.
   \end{verbatim}
-  \caption{Corte alfa: o Jogador MAX j\'{a} tem garantido o valor~3
-           (ramo esquerdo). No ramo direito, o MIN encontrou 2,
-           que \'{e} pior para MAX. Os restantes filhos do ramo
-           direito s\~{a}o descartados.}
+  \caption{Alpha cutoff: the MAX player has already guaranteed the value~3
+           (left branch). In the right branch, the MIN node found 2,
+           which is worse for MAX. The remaining children of the right
+           branch are discarded.}
   \label{fig:alphabeta_cutoff}
 \end{figure}
 
-\subsubsection{Implementa\c{c}\~{a}o}
+\subsubsection{Implementation}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Pesquisa alfa-beta --- caso recursivo},
+    caption={Alpha-beta search --- recursive case},
     label={lst:alphabeta},
     numbers=left,
     basicstyle=\small\ttfamily,
@@ -377,7 +376,7 @@ alphabeta(Board, Player, P1Pos, P2Pos, Depth, Alpha, Beta,
                10000, none, none, Value, BM, BR)
     ).
 
-% No MAX: actualiza alpha e corta se alpha >= beta
+% MAX node: update alpha and cut if alpha >= beta
 ab_max([move(MPos,RPos)|Rest], Board, Other, P1Pos, P2Pos,
        CurPlayer, Depth, Alpha, Beta, BestVal, BestM, BestR,
        Val, BM, BR) :-
@@ -391,55 +390,55 @@ ab_max([move(MPos,RPos)|Rest], Board, Other, P1Pos, P2Pos,
     ),
     NewAlpha is max(Alpha, NewBest),
     ( NewAlpha >= Beta
-    ->  Val = NewBest, BM = NewBM, BR = NewBR  % corte beta
+    ->  Val = NewBest, BM = NewBM, BR = NewBR  % beta cutoff
     ;   ab_max(Rest, Board, Other, P1Pos, P2Pos,
                CurPlayer, Depth, NewAlpha, Beta,
                NewBest, NewBM, NewBR, Val, BM, BR)
     ).
 \end{lstlisting}
 
-\subsubsection{Ganho de Desempenho}
+\subsubsection{Performance Gain}
 
-O corte alfa-beta reduz drasticamente o n\'{u}mero de n\'{o}s avaliados~\cite{knuth1975analysis}:
+Alpha-beta pruning drastically reduces the number of evaluated nodes~\cite{knuth1975analysis}:
 
 \begin{table}[htbp]
-  \caption{Complexidade: minimax vs.\ alfa-beta}
+  \caption{Complexity: minimax vs.\ alpha-beta}
   \label{tab:complexity}
   \centering
   \begin{tabular}{lll}
     \toprule
-    \textbf{Algoritmo} & \textbf{Complexidade} & \textbf{N\'{o}s (b=8, d=4)} \\
+    \textbf{Algorithm} & \textbf{Complexity} & \textbf{Nodes (b=8, d=4)} \\
     \midrule
-    Minimax puro    & $O(b^d)$      & $8^4 = 4{.}096$ \\
-    Alfa-beta ideal & $O(b^{d/2})$  & $8^2 = 64$ \\
+    Pure minimax      & $O(b^d)$      & $8^4 = 4{,}096$ \\
+    Ideal alpha-beta  & $O(b^{d/2})$  & $8^2 = 64$ \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-Na pr\'{a}tica, considerando que cada movimento tem em m\'{e}dia~8 destinos
-poss\'{i}veis e 34 casas remov\'{i}veis num tabuleiro 6{\texttimes}6 inicial,
-o fator de ramifica\c{c}\~{a}o real \'{e} $\approx 102$ (ver
-Cap\'{i}tulo~\ref{chap:eval}). O alfa-beta com boa ordena\c{c}\~{a}o reduz este
-fator para $\approx \sqrt{102} \approx 10$ por n\'{i}vel.
+In practice, given that each move has on average~8 possible destinations
+and 34 removable squares on an initial 6{\texttimes}6 board,
+the actual branching factor is $\approx 102$ (see
+Chapter~\ref{chap:eval}). Alpha-beta with good move ordering reduces this
+factor to $\approx \sqrt{102} \approx 10$ per level.
 
 % -------------------------------------------------------------------
-\subsection{Ordena\c{c}\~{a}o de Movimentos}
+\subsection{Move Ordering}
 \label{subsec:ordering}
 
-A efic\'{a}cia do corte alfa-beta depende fortemente da ordem em que os
-movimentos s\~{a}o avaliados. Avaliar primeiro os movimentos mais
-prometedores maximiza os cortes.
+The effectiveness of alpha-beta pruning depends strongly on the order
+in which moves are evaluated. Evaluating the most promising moves first
+maximises the number of cutoffs.
 
-\textbf{Heur\'{i}stica implementada:}
+\textbf{Implemented heuristic:}
 \begin{itemize}
-  \item \textbf{Movimentos centrais primeiro}: casas perto do centro do
-        tabuleiro oferecem mais op\c{c}\~{o}es futuras (maior mobilidade).
-  \item \textbf{Remo\c{c}\~{o}es pr\'{o}ximas do advers\'{a}rio primeiro}: remover casas
-        adjacentes ao advers\'{a}rio reduz mais rapidamente a sua mobilidade.
+  \item \textbf{Central moves first}: squares near the centre of the
+        board offer more future options (greater mobility).
+  \item \textbf{Removals close to the opponent first}: removing squares
+        adjacent to the opponent reduces their mobility more rapidly.
 \end{itemize}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Fun\c{c}\~{a}o de pontua\c{c}\~{a}o para ordena\c{c}\~{a}o de movimentos},
+    caption={Scoring function for move ordering},
     label={lst:ordering},
     numbers=left,
     basicstyle=\small\ttfamily,
@@ -448,86 +447,86 @@ score_pair(Center, OppR, OppC,
            move(MR/MC, RR/RC),
            Score-move(MR/MC, RR/RC)) :-
     MDR is abs(MR - Center), MDC is abs(MC - Center),
-    MoveScore is MDR + MDC,    % menor = mais central
+    MoveScore is MDR + MDC,    % lower = more central
     RDR is abs(RR - OppR), RDC is abs(RC - OppC),
-    RemScore is RDR + RDC,     % menor = mais perto do adversario
-    Score is MoveScore * 3 - RemScore. % peso: movimento > remocao
+    RemScore is RDR + RDC,     % lower = closer to opponent
+    Score is MoveScore * 3 - RemScore. % weight: move > removal
 \end{lstlisting}
 
 % -------------------------------------------------------------------
-\subsection{Fun\c{c}\~{a}o de Avalia\c{c}\~{a}o}
+\subsection{Evaluation Function}
 \label{subsec:eval_func}
 
-Quando a pesquisa atinge a profundidade m\'{a}xima (sem o jogo ter
-terminado), \'{e} necess\'{a}rio avaliar heuristicamente a posi\c{c}\~{a}o atual.
+When the search reaches the maximum depth without the game having
+ended, it is necessary to heuristically evaluate the current position.
 
-\textbf{Dois crit\'{e}rios foram escolhidos:}
+\textbf{Two criteria were selected:}
 
 \begin{enumerate}
-  \item \textbf{Mobilidade} --- o n\'{u}mero de movimentos legais dispon\'{i}veis.
-        Um jogador com mais movimentos tem mais liberdade e est\'{a} mais longe
-        de ser isolado. Este crit\'{e}rio tem peso~10.
-  \item \textbf{Centralidade} --- qu\~{a}o pr\'{o}ximo est\'{a} o pe\~{a}o do centro
-        do tabuleiro. O centro oferece mais dire\c{c}\~{o}es de fuga.
-        Este crit\'{e}rio serve para desempatar.
+  \item \textbf{Mobility} --- the number of legal moves available.
+        A player with more moves has greater freedom and is further from
+        being isolated. This criterion carries a weight of~10.
+  \item \textbf{Centrality} --- how close the pawn is to the centre
+        of the board. The centre offers more escape directions.
+        This criterion serves as a tiebreaker.
 \end{enumerate}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Fun\c{c}\~{a}o de avalia\c{c}\~{a}o heur\'{i}stica},
+    caption={Heuristic evaluation function},
     label={lst:evaluate},
     numbers=left,
     basicstyle=\small\ttfamily,
     frame=single]
 evaluate(Board, P1Pos, P2Pos, Value) :-
     P1Pos = P1R/P1C, P2Pos = P2R/P2C,
-    valid_moves(Board, P1R, P1C, M1), length(M1, S1), % mobilidade P1
-    valid_moves(Board, P2R, P2C, M2), length(M2, S2), % mobilidade P2
+    valid_moves(Board, P1R, P1C, M1), length(M1, S1), % P1 mobility
+    valid_moves(Board, P2R, P2C, M2), length(M2, S2), % P2 mobility
     board_size(Board, Size),
     Center is (Size - 1) / 2.0,
     centrality(P1R, P1C, Center, Cent1),
     centrality(P2R, P2C, Center, Cent2),
     Value is (S1 - S2) * 10 + (Cent1 - Cent2).
-    % positivo = bom para P1; negativo = bom para P2
+    % positive = good for P1; negative = good for P2
 \end{lstlisting}
 
-\textbf{Exemplo pr\'{a}tico:} num tabuleiro 3{\texttimes}3 com P1 no canto (0,0)
-e P2 no centro (1,1), o c\'{a}lculo \'{e}:
+\textbf{Practical example:} on a 3{\texttimes}3 board with P1 at corner (0,0)
+and P2 at centre (1,1), the calculation is:
 \begin{itemize}
-  \item Mobilidade P1 = 2 movimentos (confinado ao canto)
-  \item Mobilidade P2 = 7 movimentos (centro, m\'{a}xima liberdade)
-  \item Diferen\c{c}a de mobilidade: $(2-7) \times 10 = -50$
-  \item Centralidade: $(0+0) - (1+1) = -2$ (P2 est\'{a} mais ao centro)
-  \item Pontua\c{c}\~{a}o total: $-50 + (-2) = -52$
+  \item P1 mobility = 2 moves (confined to the corner)
+  \item P2 mobility = 7 moves (centre, maximum freedom)
+  \item Mobility difference: $(2-7) \times 10 = -50$
+  \item Centrality: $(0+0) - (1+1) = -2$ (P2 is closer to the centre)
+  \item Total score: $-50 + (-2) = -52$
 \end{itemize}
-O valor negativo indica que P2 est\'{a} em clara vantagem --- o que \'{e} correto:
-P2 no centro tem muito mais liberdade.
+The negative value indicates that P2 holds a clear advantage --- which is
+correct: P2 at the centre enjoys considerably greater freedom.
 
-\textbf{Justifica\c{c}\~{a}o da escolha:} a mobilidade \'{e} o indicador mais direto
-de quanto um jogador est\'{a} pr\'{o}ximo de ser isolado. A centralidade captura
-a tend\^{e}ncia estrat\'{e}gica de manter o pe\~{a}o no centro do tabuleiro.
+\textbf{Justification:} mobility is the most direct indicator of how close a
+player is to being isolated. Centrality captures the strategic tendency of
+maintaining the pawn near the centre of the board.
 
 % ===================================================================
-\section{Interface de Jogo (\texttt{game.pl})}
+\section{Game Interface (\texttt{game.pl})}
 \label{sec:game_loop}
 
-\subsection{Fluxo do Programa}
+\subsection{Program Flow}
 
-O jogo segue o seguinte fluxo:
+The game follows the flow described below:
 
 \begin{enumerate}
-  \item \texttt{play/0} --- exibe o menu principal.
-  \item \texttt{main\_menu/0} --- permite escolher o modo de jogo
-        (humano-humano, humano-IA, IA-IA).
-  \item \texttt{setup\_game/2} --- configura o tamanho do tabuleiro e a
-        profundidade de pesquisa da IA.
-  \item \texttt{start\_game/4} --- cria o tabuleiro inicial com os pe\~{o}es
-        nos cantos opostos.
-  \item \texttt{game\_loop/6} --- ciclo principal: exibe o tabuleiro,
-        verifica fim de jogo, executa o turno do jogador corrente.
+  \item \texttt{play/0} --- displays the main menu.
+  \item \texttt{main\_menu/0} --- allows the game mode to be selected
+        (human-human, human-AI, AI-AI).
+  \item \texttt{setup\_game/2} --- configures the board size and the
+        AI search depth.
+  \item \texttt{start\_game/4} --- creates the initial board with pawns
+        at opposite corners.
+  \item \texttt{game\_loop/6} --- main loop: displays the board,
+        checks for game over, and executes the current player's turn.
 \end{enumerate}
 
 \begin{lstlisting}[language=Prolog,
-    caption={Ciclo principal do jogo},
+    caption={Main game loop},
     label={lst:game_loop},
     numbers=left,
     basicstyle=\small\ttfamily,
@@ -535,73 +534,70 @@ O jogo segue o seguinte fluxo:
 game_loop(Board, Turn, P1Pos, P2Pos, Mode, Depth) :-
     display_game(Board, Turn),
     ( game_over(Board, Turn, P1Pos, P2Pos)
-    ->  Winner is 3 - Turn,  % o adversario venceu
+    ->  Winner is 3 - Turn,  % the opponent won
         announce_winner(Winner, Board),
         play_again
     ;   execute_turn(Board, Turn, P1Pos, P2Pos,
                      Mode, Depth,
                      NewBoard, NewP1, NewP2),
-        NextTurn is 3 - Turn,  % alterna: 1->2, 2->1
+        NextTurn is 3 - Turn,  % alternate: 1->2, 2->1
         game_loop(NewBoard, NextTurn, NewP1, NewP2,
                   Mode, Depth)
     ).
 \end{lstlisting}
 
-\subsection{Turno Humano vs.\ Turno IA}
+\subsection{Human Turn vs.\ AI Turn}
 
-Quando o turno pertence a um jogador humano, o programa pede a
-entrada no formato \texttt{Linha/Coluna.} (com ponto final, pois o
-SWI-Prolog interpreta a entrada como um termo Prolog completo):
+When the turn belongs to a human player, the program requests
+input in the format \texttt{Row/Column.} (with a full stop, since
+SWI-Prolog interprets the input as a complete Prolog term):
 
 \begin{verbatim}
-Move (linha/coluna, ex: 1/2): 1/1.
-Remove uma casa (linha/coluna): 2/2.
+Move (row/column, e.g.: 1/2): 1/1.
+Remove a square (row/column): 2/2.
 \end{verbatim}
 
-Quando o turno pertence \`{a} IA, o predicado \texttt{best\_move/7}
-\'{e} invocado automaticamente, que executa o alfa-beta e devolve o
-par (movimento, remo\c{c}\~{a}o) \'{o}timo.
+When the turn belongs to the AI, the predicate \texttt{best\_move/7}
+is invoked automatically, executing the alpha-beta search and returning
+the optimal (move, removal) pair.
 
 % ===================================================================
-\section{Utiliza\c{c}\~{a}o de Intelig\^{e}ncia Artificial no Desenvolvimento}
+\section{Use of Artificial Intelligence in Development}
 \label{sec:ai_usage}
 
-Ao longo do desenvolvimento deste projeto, a IA generativa
-(nomeadamente o modelo Claude da Anthropic) foi utilizada de forma
-extensa e integrada em todas as fases do trabalho. A sua utiliza\c{c}\~{a}o
-n\~{a}o se limitou a gerar c\'{o}digo, mas abrangeu todo o processo de
-aprendizagem e desenvolvimento:
+Throughout the development of this project, generative AI
+(specifically the Claude model by Anthropic) was used extensively and
+integrally across all phases of the work. Its use was not limited to
+code generation, but encompassed the entire learning and development process:
 
 \begin{enumerate}
-  \item \textbf{Aprendizagem de conceitos:} a IA foi consultada para
-        compreender os fundamentos do Prolog (unifica\c{c}\~{a}o,
-        \textit{backtracking}, listas, predicados embutidos) atrav\'{e}s
-        de explica\c{c}\~{o}es, exemplos e analogias.
+  \item \textbf{Concept learning:} AI was consulted to understand
+        the fundamentals of Prolog (unification,
+        \textit{backtracking}, lists, built-in predicates) through
+        explanations, examples, and analogies.
 
-  \item \textbf{Compreens\~{a}o dos algoritmos:} o princ\'{i}pio
-        \textit{minimax} e o algoritmo \textit{alfa-beta} foram
-        explorados com a assist\^{e}ncia da IA, que forneceu
-        explica\c{c}\~{o}es passo a passo, diagramas de \'{a}rvores e
-        an\'{a}lise de complexidade.
+  \item \textbf{Algorithm understanding:} the \textit{minimax}
+        principle and the \textit{alpha-beta} algorithm were
+        explored with AI assistance, which provided step-by-step
+        explanations, tree diagrams, and complexity analysis.
 
-  \item \textbf{Explora\c{c}\~{a}o de alternativas:} foram discutidas
-        diferentes abordagens para a representa\c{c}\~{a}o do tabuleiro
-        (lista de listas vs.\ tabela de hash), para a fun\c{c}\~{a}o de
-        avalia\c{c}\~{a}o (mobilidade, centralidade, dist\^{a}ncia entre
-        pe\~{o}es) e para a ordena\c{c}\~{a}o de movimentos.
+  \item \textbf{Exploration of alternatives:} different approaches
+        were discussed for board representation
+        (list of lists vs.\ hash table), for the evaluation function
+        (mobility, centrality, distance between pawns), and for
+        move ordering strategies.
 
-  \item \textbf{Escrita e depura\c{c}\~{a}o de c\'{o}digo:} a IA auxiliou na
-        escrita de predicados, na corre\c{c}\~{a}o de erros l\'{o}gicos
-        (incluindo um \textit{bug} na acumula\c{c}\~{a}o de valores no
-        alfa-beta), e na formula\c{c}\~{a}o dos 33 testes unit\'{a}rios.
+  \item \textbf{Code writing and debugging:} AI assisted in
+        writing predicates, correcting logical errors
+        (including a bug in the value accumulation within the
+        alpha-beta procedure), and in formulating the 33 unit tests.
 
-  \item \textbf{Elabora\c{c}\~{a}o do relat\'{o}rio:} a IA foi utilizada para
-        auxiliar na reda\c{c}\~{a}o, estrutura\c{c}\~{a}o e revis\~{a}o deste
-        documento, com o objetivo de tornar as explica\c{c}\~{o}es claras
-        e acess\'{i}veis.
+  \item \textbf{Report writing:} AI was used to assist in
+        drafting, structuring, and reviewing this document,
+        with the objective of producing clear and accessible
+        explanations.
 \end{enumerate}
 
-Em todos os casos, o uso da IA foi orientado pelos objetivos
-did\'{a}ticos da unidade curricular: a IA serviu como ferramenta de
-aprendizagem e produtividade, e n\~{a}o como substituto da
-compreens\~{a}o dos conceitos.
+In all cases, the use of AI was guided by the pedagogical objectives
+of the course: AI served as a learning and productivity tool,
+and not as a substitute for understanding the underlying concepts.

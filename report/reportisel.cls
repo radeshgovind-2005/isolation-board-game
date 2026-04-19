@@ -247,7 +247,7 @@
 %=================================================
 % PACKAGE algorithm and algpseudocode
 %=================================================
-\usepackage[Algoritmo]{algorithm}
+\usepackage[Algorithm]{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
 
@@ -340,14 +340,14 @@
 
 %% Some relevant strings
 \gdef\@singlemadviserstr{Professor}
-\gdef\@singlefadviserstr{Professora}
-\gdef\@manymadviserstr{Professores}
-\gdef\@manyfadviserstr{Professoras}
+\gdef\@singlefadviserstr{Professor}
+\gdef\@manymadviserstr{Professors}
+\gdef\@manyfadviserstr{Professors}
 
-\gdef\@reportstr{Relatório para a 
-Unidade Curricular de \@course \\da \@majorfield}
-\gdef\@prereportstr{Relatório intermédio para a 
-Unidade Curricular de \@course \\da \@majorfield}
+\gdef\@reportstr{Report for the
+Course Unit of \@course \\of the \@majorfield}
+\gdef\@prereportstr{Interim Report for the
+Course Unit of \@course \\of the \@majorfield}
 
 \gdef\@presentationtext{\@reporttype}
 

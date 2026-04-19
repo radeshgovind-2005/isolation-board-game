@@ -1,32 +1,32 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  chapter3.tex  --  Avaliacao Experimental
-%  Jogo ISOLA em Prolog com Algoritmo Alfa-Beta
-%  Inteligencia Artificial, ISEL 2025/2026
+%  chapter3.tex  --  Experimental Evaluation
+%  ISOLA Game in Prolog with Alpha-Beta Algorithm
+%  Artificial Intelligence, ISEL 2025/2026
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Avalia\c{c}\~{a}o Experimental}
+\chapter{Experimental Evaluation}
 \label{chap:eval}
 
-Este cap\'{i}tulo apresenta os resultados dos testes realizados ao sistema:
-testes unit\'{a}rios de correc\c{c}\~{a}o funcional e benchmarks de desempenho
-em diferentes configura\c{c}\~{o}es de tabuleiro e profundidade de pesquisa.
+This chapter presents the results of the tests performed on the system:
+unit tests for functional correctness and performance benchmarks
+under different board size and search depth configurations.
 
 % ===================================================================
-\section{Testes Unit\'{a}rios}
+\section{Unit Tests}
 \label{sec:unit_tests}
 
-O projeto inclui uma suite de 33 testes unit\'{a}rios (ficheiro
-\texttt{tests/tests.pl}), organizados em quatro grupos.
+The project includes a suite of 33 unit tests (file
+\texttt{tests/tests.pl}), organised into four groups.
 
-\subsection{Execu\c{c}\~{a}o e Resultados}
+\subsection{Execution and Results}
 
-Os testes foram executados com o comando:
+The tests were executed with the command:
 
 \begin{verbatim}
 swipl -g "run_tests, halt" tests/tests.pl
 \end{verbatim}
 
-O resultado obtido foi:
+The result obtained was:
 
 \begin{verbatim}
 % Start unit: board
@@ -77,53 +77,53 @@ O resultado obtido foi:
 % All 33 tests passed in 0.029 seconds (0.014 cpu)
 \end{verbatim}
 
-Todos os 33 testes passaram em 0.029~segundos. A execu\c{c}\~{a}o r\'{a}pida
-deve-se ao facto de a maioria dos testes operar sobre tabuleiros 3{\texttimes}3
-ou posi\c{c}\~{o}es artificiais constru\'{i}das especificamente para o teste.
+All 33 tests passed in 0.029~seconds. The fast execution is due
+to the fact that most tests operate on 3{\texttimes}3 boards or
+on artificially constructed positions specifically designed for testing.
 
-\subsection{Cobertura dos Testes}
+\subsection{Test Coverage}
 
 \begin{table}[htbp]
-  \caption{Distribui\c{c}\~{a}o e cobertura dos testes unit\'{a}rios}
+  \caption{Distribution and coverage of unit tests}
   \label{tab:tests}
   \centering
   \begin{tabular}{llp{7cm}}
     \toprule
-    \textbf{M\'{o}dulo} & \textbf{N\'{u}m. testes} & \textbf{Aspetos verificados} \\
+    \textbf{Module} & \textbf{No.\ tests} & \textbf{Aspects verified} \\
     \midrule
     \texttt{board}       & 11 &
-      Cria\c{c}\~{a}o do tabuleiro; acesso por coordenadas;
-      atualiza\c{c}\~{a}o n\~{a}o destrutiva; acesso fora dos limites
-      (deve falhar sem erro); \texttt{empty\_cell} para
-      c\'{e}lulas livres, ocupadas e removidas. \\
+      Board creation; coordinate-based access;
+      non-destructive update; out-of-bounds access
+      (must fail without error); \texttt{empty\_cell} for
+      free, occupied, and removed cells. \\
     \addlinespace
     \texttt{rules}       & 12 &
-      Movimentos v\'{a}lidos do centro e do canto;
-      bloqueio por casa removida; aus\^{e}ncia de sobreposic\~{a}o
-      com o advers\'{a}rio; lista de remo\c{c}\~{o}es (exclu\'{i} pe\~{o}es
-      e casas j\'{a} removidas); aplica\c{c}\~{a}o de movimento e
-      remo\c{c}\~{a}o; detec\c{c}\~{a}o de fim de jogo. \\
+      Valid moves from centre and corner;
+      blocking by a removed square; absence of overlap
+      with the opponent; removal list (excludes pawns
+      and already-removed squares); move and removal
+      application; end-game detection. \\
     \addlinespace
     \texttt{ai}          & 8 &
-      Fun\c{c}\~{a}o de avalia\c{c}\~{a}o (vantagem P1, vantagem P2,
-      posi\c{c}\~{a}o sim\'{e}trica); valores terminais; melhor
-      movimento em situa\c{c}\~{a}o de vit\'{o}ria trivial;
-      alfa-beta em posi\c{c}\~{a}o terminal; minimax a profundidade zero. \\
+      Evaluation function (P1 advantage, P2 advantage,
+      symmetric position); terminal values; best
+      move in a trivially winning position;
+      alpha-beta at a terminal position; minimax at depth zero. \\
     \addlinespace
     \texttt{integration} & 2 &
-      Turno completo (movimento + remo\c{c}\~{a}o num jogo real);
-      detec\c{c}\~{a}o de fim de jogo no contexto de um jogo jogado. \\
+      Complete turn (move + removal in a real game);
+      end-game detection in the context of a played game. \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsection{Exemplo de Teste Unit\'{a}rio}
+\subsection{Unit Test Example}
 
-Para ilustrar a estrutura dos testes, apresenta-se o teste que verifica
-o n\'{u}mero de movimentos v\'{a}lidos a partir do centro de um tabuleiro 3{\texttimes}3:
+To illustrate the structure of the tests, the test that verifies
+the number of valid moves from the centre of a 3{\texttimes}3 board is presented:
 
 \begin{lstlisting}[language=Prolog,
-    caption={Teste: movimentos do centro de um tabuleiro 3{\texttimes}3},
+    caption={Test: moves from the centre of a 3{\texttimes}3 board},
     label={lst:test_example},
     numbers=left,
     basicstyle=\small\ttfamily,
@@ -135,48 +135,48 @@ test(valid_moves_centre_3x3_count) :-
     initial_board(3, B0),
     set_cell(B0, 0, 0, x, B1),
     set_cell(B1, 2, 2, o, Board),
-    valid_moves(Board, 1, 1, Moves), % piao no centro (1,1)
+    valid_moves(Board, 1, 1, Moves), % pawn at centre (1,1)
     length(Moves, N),
-    assertion(N =:= 7). % 8 direcoes - 1 (canto ocupado)
+    assertion(N =:= 7). % 8 directions - 1 (occupied corner)
 
 :- end_tests(rules).
 \end{lstlisting}
 
 % ===================================================================
-\section{Benchmarks de Desempenho}
+\section{Performance Benchmarks}
 \label{sec:benchmarks}
 
-Para avaliar o desempenho do algoritmo alfa-beta, foram medidos os
-tempos de execu\c{c}\~{a}o do primeiro movimento da IA em diferentes
-combina\c{c}\~{o}es de tamanho de tabuleiro e profundidade de pesquisa.
-Todos os testes partiram do estado inicial do jogo (pe\~{o}es nos cantos
-opostos, tabuleiro completamente livre).
+To evaluate the performance of the alpha-beta algorithm, the
+execution times for the first AI move were measured under different
+combinations of board size and search depth.
+All tests started from the initial game state (pawns at opposite
+corners, completely free board).
 
-\subsection{Metodologia}
+\subsection{Methodology}
 
-Os tempos foram medidos com o predicado \texttt{get\_time/1} do
-SWI-Prolog (tempo de rel\'{o}gio de parede), no seguinte ambiente:
+Times were measured using the \texttt{get\_time/1} predicate from
+SWI-Prolog (wall-clock time), in the following environment:
 
 \begin{itemize}
-  \item Sistema operativo: macOS Darwin 25.3.0 (Apple Silicon)
-  \item SWI-Prolog (vers\~{a}o padr\~{a}o, sem otimiza\c{c}\~{o}es adicionais)
-  \item Medida: tempo para calcular o primeiro movimento da IA
-        a partir do estado inicial
+  \item Operating system: macOS Darwin 25.3.0 (Apple Silicon)
+  \item SWI-Prolog (standard version, no additional optimisations)
+  \item Measurement: time to compute the first AI move
+        from the initial state
 \end{itemize}
 
-\subsection{Resultados}
+\subsection{Results}
 
 \begin{table}[htbp]
-  \caption{Tempo de c\'{a}lculo do primeiro movimento da IA}
+  \caption{Computation time for the first AI move}
   \label{tab:benchmarks}
   \centering
   \begin{tabular}{ccrll}
     \toprule
-    \textbf{Tabuleiro} &
-    \textbf{Profundidade} &
-    \textbf{Tempo} &
-    \textbf{Movimento} &
-    \textbf{Remo\c{c}\~{a}o} \\
+    \textbf{Board} &
+    \textbf{Depth} &
+    \textbf{Time} &
+    \textbf{Move} &
+    \textbf{Removal} \\
     \midrule
     3{\texttimes}3 & 2 & 4~ms       & (0,0)$\to$(1,1) & (1,2) \\
     3{\texttimes}3 & 4 & 136~ms     & (0,0)$\to$(1,1) & (1,2) \\
@@ -186,147 +186,145 @@ SWI-Prolog (tempo de rel\'{o}gio de parede), no seguinte ambiente:
   \end{tabular}
 \end{table}
 
-\subsection{An\'{a}lise dos Resultados}
+\subsection{Results Analysis}
 
-\subsubsection{Fator de Ramifica\c{c}\~{a}o Real}
+\subsubsection{Actual Branching Factor}
 
-No estado inicial de um tabuleiro 6{\texttimes}6, o Jogador~1 pode:
+In the initial state of a 6{\texttimes}6 board, Player~1 can:
 \begin{itemize}
-  \item \textbf{Mover} para 3 casas (canto com 3 vizinhos livres).
-  \item \textbf{Remover} qualquer uma de 34 casas livres
-        (36 casas $-$ 2 pe\~{o}es).
+  \item \textbf{Move} to 3 squares (corner with 3 free neighbours).
+  \item \textbf{Remove} any of 34 free squares
+        (36 squares $-$ 2 pawns).
 \end{itemize}
 
-Total de pares (movimento, remo\c{c}\~{a}o): $3 \times 34 = 102$.
+Total (move, removal) pairs: $3 \times 34 = 102$.
 
-Este \'{e} o fator de ramifica\c{c}\~{a}o no n\'{i}vel 1. Nas jogadas seguintes,
-quando os pe\~{o}es se movem para o centro, cada jogador pode ter at\'{e}~8
-destinos poss\'{i}veis, o que eleva o fator de ramifica\c{c}\~{a}o.
+This is the branching factor at level 1. In subsequent moves,
+as pawns advance towards the centre, each player may have up to~8
+possible destinations, increasing the branching factor further.
 
-\subsubsection{Impacto da Profundidade}
+\subsubsection{Impact of Depth}
 
-O salto de profundidade~2 para profundidade~4 no tabuleiro 6{\texttimes}6
-representa um aumento de $87~\text{ms}$ para $167.619~\text{ms}$ ---
-um fator de aproximadamente $\mathbf{1927\times}$. Este crescimento
-super-exponencial confirma o car\'{a}ter combinat\'{o}rio do problema.
+The transition from depth~2 to depth~4 on the 6{\texttimes}6 board
+represents an increase from $87~\text{ms}$ to $167{,}619~\text{ms}$ ---
+a factor of approximately $\mathbf{1927\times}$. This super-exponential
+growth confirms the combinatorial nature of the problem.
 
-Embora o alfa-beta reduza significativamente o n\'{u}mero de n\'{o}s
-explorados em rela\c{c}\~{a}o ao minimax puro, o fator de ramifica\c{c}\~{a}o
-elevado ($\approx 102$) no estado inicial de um tabuleiro 6{\texttimes}6
-torna a profundidade~4 impraticável para uso interativo.
+Although alpha-beta significantly reduces the number of explored nodes
+compared to pure minimax, the high branching factor ($\approx 102$) in the
+initial state of a 6{\texttimes}6 board renders depth~4 impractical for
+interactive use.
 
-\subsubsection{Consist\^{e}ncia dos Movimentos Escolhidos}
+\subsubsection{Consistency of Selected Moves}
 
-Nota-se que em todas as configura\c{c}\~{o}es, a IA escolheu o mesmo
-movimento: mover o pe\~{a}o do canto (0,0) para o centro (1,1).
-Isto \'{e} consistente com a fun\c{c}\~{a}o de avalia\c{c}\~{a}o que favorece
-a centralidade --- o pe\~{a}o no centro (1,1) de um tabuleiro 3{\texttimes}3
-tem acesso a at\'{e}~7 casas, enquanto no canto (0,0) tem apenas~3.
+It is notable that across all configurations, the AI selected the
+same move: moving the pawn from the corner (0,0) to the centre (1,1).
+This is consistent with the evaluation function that favours
+centrality --- the pawn at position (1,1) of a 3{\texttimes}3 board
+can access up to~7 squares, whereas at the corner (0,0) it has only~3.
 
-A diferen\c{c}a na escolha da remo\c{c}\~{a}o entre profundidade~2
-((1,2) em 3{\texttimes}3) e profundidade~4 ((4,4) em 6{\texttimes}6)
-reflete a vis\~{a}o de futuro mais profunda da pesquisa a maior
-profundidade.
+The difference in the removal choice between depth~2
+((1,2) on 3{\texttimes}3) and depth~4 ((4,4) on 6{\texttimes}6)
+reflects the deeper lookahead afforded by the greater search depth.
 
-\subsubsection{Avalia\c{c}\~{a}o da Fun\c{c}\~{a}o Heur\'{i}stica}
+\subsubsection{Heuristic Function Evaluation}
 
-Os testes confirm\'{a}ram os valores esperados da fun\c{c}\~{a}o de avalia\c{c}\~{a}o:
+The tests confirmed the expected values of the evaluation function:
 
 \begin{table}[htbp]
-  \caption{Valores da fun\c{c}\~{a}o de avalia\c{c}\~{a}o em posi\c{c}\~{o}es de teste}
+  \caption{Evaluation function values at test positions}
   \label{tab:eval_values}
   \centering
   \begin{tabular}{llrrr}
     \toprule
-    \textbf{Posi\c{c}\~{a}o} &
-    \textbf{Configura\c{c}\~{a}o} &
-    \textbf{Mob. P1} &
-    \textbf{Mob. P2} &
-    \textbf{Valor} \\
+    \textbf{Position} &
+    \textbf{Configuration} &
+    \textbf{Mob.\ P1} &
+    \textbf{Mob.\ P2} &
+    \textbf{Value} \\
     \midrule
-    Sim\'{e}trica (cantos opostos)  & 3{\texttimes}3, (0,0) vs.\ (2,2) & 3 & 3 & 0 \\
-    Assim\'{e}trica (canto vs.\ centro) & 3{\texttimes}3, (0,0) vs.\ (1,1) & 2 & 7 & $-52$ \\
+    Symmetric (opposite corners)    & 3{\texttimes}3, (0,0) vs.\ (2,2) & 3 & 3 & 0 \\
+    Asymmetric (corner vs.\ centre) & 3{\texttimes}3, (0,0) vs.\ (1,1) & 2 & 7 & $-52$ \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-O valor~$0$ na posi\c{c}\~{a}o sim\'{e}trica confirma que a fun\c{c}\~{a}o n\~{a}o \'{e}
-tendenciosa para nenhum jogador. O valor~$-52$ na posi\c{c}\~{a}o assim\'{e}trica
-reflete corretamente a vantagem significativa de P2 (maior mobilidade e
-melhor centralidade).
+The value~$0$ at the symmetric position confirms that the function is
+unbiased towards either player. The value~$-52$ at the asymmetric position
+correctly reflects the significant advantage of P2 (greater mobility and
+better centrality).
 
 % ===================================================================
-\section{Limita\c{c}\~{o}es e Trabalho Futuro}
+\section{Limitations and Future Work}
 \label{sec:limitations}
 
-\subsection{Limita\c{c}\~{o}es Identificadas}
+\subsection{Identified Limitations}
 
 \begin{enumerate}
-  \item \textbf{Desempenho em tabuleiros grandes a profundidade alta:}
-        A combina\c{c}\~{a}o 6{\texttimes}6 + profundidade~4 \'{e} proibitiva
-        ($\approx 167$~s por movimento). O fator de ramifica\c{c}\~{a}o
-        elevado, resultante da grande quantidade de casas remov\'{i}veis,
-        \'{e} a causa principal.
+  \item \textbf{Performance on large boards at high depth:}
+        The 6{\texttimes}6 + depth~4 combination is prohibitive
+        ($\approx 167$~s per move). The high branching factor,
+        resulting from the large number of removable squares,
+        is the primary cause.
 
-  \item \textbf{Formato de entrada:} os jogadores humanos t\^{e}m de
-        introduzir posi\c{c}\~{o}es no formato \texttt{Linha/Coluna.}
-        (com ponto final), pois o predicado \texttt{read/1} do
-        SWI-Prolog espera um termo Prolog completo terminado por ponto.
-        Este formato pode causar confus\~{a}o.
+  \item \textbf{Input format:} human players must enter positions
+        in the format \texttt{Row/Column.}
+        (with a full stop), since the \texttt{read/1} predicate in
+        SWI-Prolog expects a complete Prolog term terminated by a full stop.
+        This format may cause confusion.
 
-  \item \textbf{Aus\^{e}ncia de tabela de transposi\c{c}\~{a}o:} posi\c{c}\~{o}es
-        iguais atingidas por caminhos diferentes s\~{a}o reavaliadas.
-        Uma tabela de transposi\c{c}\~{a}o reduziria o trabalho redundante.
+  \item \textbf{Absence of a transposition table:} identical positions
+        reached via different paths are re-evaluated.
+        A transposition table would reduce redundant computation.
 
-  \item \textbf{Sem aprofundamento iterativo:} a profundidade \'{e}
-        fixa. O aprofundamento iterativo (aumentar gradualmente a
-        profundidade at\'{e} ao limite de tempo) melhoraria a qualidade
-        do jogo em tempo fixo.
+  \item \textbf{No iterative deepening:} the search depth is
+        fixed. Iterative deepening (gradually increasing
+        the depth up to a time limit) would improve game
+        quality within a fixed time budget.
 \end{enumerate}
 
-\subsection{Recomenda\c{c}\~{o}es de Configura\c{c}\~{a}o}
+\subsection{Configuration Recommendations}
 
-Com base nos resultados experimentais:
+Based on the experimental results:
 
 \begin{itemize}
-  \item Para tabuleiros 3{\texttimes}3: profundidade~4 \'{e} adequada
-        (136~ms por movimento).
-  \item Para tabuleiros 6{\texttimes}6: profundidade~2 \'{e} o
-        compromisso recomendado (87~ms por movimento),
-        oferecendo uma resposta quase instant\^{a}nea.
-  \item Profundidade~6 n\~{a}o \'{e} recomendada para tabuleiros
-        maiores que 3{\texttimes}3 sem otimiza\c{c}\~{o}es adicionais.
+  \item For 3{\texttimes}3 boards: depth~4 is appropriate
+        (136~ms per move).
+  \item For 6{\texttimes}6 boards: depth~2 is the
+        recommended compromise (87~ms per move),
+        offering a near-instantaneous response.
+  \item Depth~6 is not recommended for boards larger
+        than 3{\texttimes}3 without additional optimisations.
 \end{itemize}
 
 % ===================================================================
-\section{Conclus\~{o}es}
+\section{Conclusions}
 \label{sec:conclusions}
 
-Este trabalho demonstrou que \'{e} poss\'{i}vel implementar um jogo de
-estrat\'{e}gia completo com IA em Prolog de forma elegante e eficaz.
+This work demonstrated that it is possible to implement a complete
+strategy game with AI in Prolog in an elegant and effective manner.
 
-\textbf{Objetivos cumpridos:}
+\textbf{Objectives achieved:}
 \begin{itemize}
-  \item Implementa\c{c}\~{a}o completa do jogo ISOLA com todos os modos
-        (humano-humano, humano-IA, IA-IA) e tamanhos de tabuleiro
-        configur\'{a}veis.
-  \item Algoritmo alfa-beta funcional com ordena\c{c}\~{a}o de movimentos
-        e fun\c{c}\~{a}o de avalia\c{c}\~{a}o heur\'{i}stica.
-  \item Suite de 33 testes unit\'{a}rios, todos bem sucedidos.
-  \item Compreens\~{a}o pr\'{a}tica do \textit{backtracking}, da programa\c{c}\~{a}o
-        l\'{o}gica e dos algoritmos de pesquisa em jogos.
+  \item Complete implementation of the ISOLA game with all modes
+        (human-human, human-AI, AI-AI) and configurable board sizes.
+  \item Functional alpha-beta algorithm with move ordering
+        and a heuristic evaluation function.
+  \item Suite of 33 unit tests, all passing.
+  \item Practical understanding of \textit{backtracking}, logic
+        programming, and game search algorithms.
 \end{itemize}
 
-\textbf{Principais aprendizagens:}
+\textbf{Key findings:}
 \begin{itemize}
-  \item O Prolog permite exprimir regras de jogo de forma quase
-        direta a partir da descri\c{c}\~{a}o em linguagem natural,
-        aproveitando o \textit{backtracking} para gerar automaticamente
-        todos os movimentos v\'{a}lidos.
-  \item O alfa-beta \'{e} essencial para tornar o \textit{minimax}
-        pr\'{a}tico: sem poda, profundidade~4 num tabuleiro 6{\texttimes}6
-        seria completamente invi\'{a}vel.
-  \item A ordena\c{c}\~{a}o de movimentos \'{e} t\~{a}o importante quanto o
-        pr\'{o}prio alfa-beta: maus movimentos avaliados primeiro
-        reduzem drasticamente a efic\'{a}cia dos cortes.
+  \item Prolog allows game rules to be expressed almost
+        directly from their natural language description,
+        exploiting \textit{backtracking} to automatically generate
+        all valid moves.
+  \item Alpha-beta is essential to make \textit{minimax}
+        practical: without pruning, depth~4 on a 6{\texttimes}6 board
+        would be entirely infeasible.
+  \item Move ordering is as important as alpha-beta itself:
+        evaluating poor moves first drastically reduces
+        the effectiveness of the cutoffs.
 \end{itemize}
