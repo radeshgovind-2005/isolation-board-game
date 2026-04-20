@@ -7,7 +7,6 @@
 %  From the project root:
 %
 %    swipl src/main.pl          (interactive, starts game)
-%    swipl -g play src/main.pl  (explicit entry predicate)
 %
 %  HOW TO RUN TESTS
 %  ----------------
